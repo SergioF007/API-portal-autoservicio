@@ -1,0 +1,347 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema PORTAL_AUTOSERVICIO_DB
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema PORTAL_AUTOSERVICIO_DB
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB` DEFAULT CHARACTER SET utf8 ;
+USE `PORTAL_AUTOSERVICIO_DB` ;
+
+-- -----------------------------------------------------
+-- Table `PORTAL_AUTOSERVICIO_DB`.`equipos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`equipos` (
+  `id_equipo` INT NOT NULL AUTO_INCREMENT,
+  `nombre_equipo` VARCHAR(20) NOT NULL,
+  `supervisor_lider` INT NULL,
+  PRIMARY KEY (`id_equipo`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `PORTAL_AUTOSERVICIO_DB`.`usuarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`usuarios` (
+  `id_usuario` INT NOT NULL AUTO_INCREMENT,
+  `tipo_documento` VARCHAR(20) NOT NULL,
+  `nombre` VARCHAR(30) NOT NULL,
+  `apellido` VARCHAR(30) NOT NULL,
+  `celular` VARCHAR(20) NOT NULL,
+  `direccion` VARCHAR(30) NULL,
+  `fecha_ingreso` DATE NULL,
+  `fecha_retiro` DATE NULL,
+  `tipo_contrato` VARCHAR(30) NULL,
+  `estado` TINYINT NULL,
+  `rol` VARCHAR(30) NULL,
+  `cargo` VARCHAR(50) NULL,
+  `correo` VARCHAR(50) NULL,
+  `supervisor_inmediato` INT(2) NULL,
+  `equipo_id` INT NULL,
+  PRIMARY KEY (`id_usuario`),
+  INDEX `id_equipo_idx` (`equipo_id` ASC),
+  CONSTRAINT `id_equipo`
+    FOREIGN KEY (`equipo_id`)
+    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`equipos` (`id_equipo`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `PORTAL_AUTOSERVICIO_DB`.`solicitud_vacaciones`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`solicitud_vacaciones` (
+  `id_solicitud_vacaciones` INT NOT NULL AUTO_INCREMENT,
+  `cantidad_dias` INT(2) NOT NULL,
+  `inicio_vacaciones` DATE NOT NULL,
+  `fin_vacaciones` DATE NOT NULL,
+  `fecha_reintegro` DATE NOT NULL,
+  `observacion` VARCHAR(250) NULL,
+  `firma_empleado` TINYINT NOT NULL,
+  `firma_supervisor` TINYINT NULL,
+  `fecha_creacion` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `estado` VARCHAR(30) NULL,
+  `usuario_id` INT NOT NULL,
+  PRIMARY KEY (`id_solicitud_vacaciones`),
+  INDEX `id_usuario_idx` (`usuario_id` ASC),
+  CONSTRAINT `id_usuario`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`usuarios` (`id_usuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (
+  `id_gestion_solicitudes` INT NOT NULL AUTO_INCREMENT,
+  `solicitud_vacaciones_id` INT NOT NULL,
+  `aprobacion_supervisor` TINYINT NULL,
+  `aprobacion_administracion` TINYINT NULL,
+  `aprobacion_solicitud` TINYINT NULL,
+  `id_administrador` INT(2) NULL,
+  PRIMARY KEY (`id_gestion_solicitudes`, `solicitud_vacaciones_id`),
+  INDEX `fk_gestion_solicitudes_solicitud_vacaciones1_idx` (`solicitud_vacaciones_id` ASC),
+  CONSTRAINT `fk_gestion_solicitudes_solicitud_vacaciones1`
+    FOREIGN KEY (`solicitud_vacaciones_id`)
+    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`solicitud_vacaciones` (`id_solicitud_vacaciones`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `PORTAL_AUTOSERVICIO_DB`.`notificaciones`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`notificaciones` (
+  `id_notificacion` INT NOT NULL AUTO_INCREMENT,
+  `gestion_solicitudes_id` INT NOT NULL,
+  `mensaje` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`id_notificacion`, `gestion_solicitudes_id`),
+  INDEX `fk_notificaciones_gestion_solicitudes1_idx` (`gestion_solicitudes_id` ASC),
+  CONSTRAINT `fk_notificaciones_gestion_solicitudes1`
+    FOREIGN KEY (`gestion_solicitudes_id`)
+    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (`solicitud_vacaciones_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `PORTAL_AUTOSERVICIO_DB`.`vacaciones`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`vacaciones` (
+  `id_vacaciones` INT NOT NULL AUTO_INCREMENT,
+  `solicitud_vacaciones_id` INT NOT NULL,
+  `periodo` VARCHAR(30) NOT NULL,
+  `dias_disfrutados` INT(2) NOT NULL,
+  INDEX `fk_vacaciones_solicitud_vacaciones1_idx` (`solicitud_vacaciones_id` ASC),
+  PRIMARY KEY (`id_vacaciones`),
+  CONSTRAINT `fk_vacaciones_solicitud_vacaciones1`
+    FOREIGN KEY (`solicitud_vacaciones_id`)
+    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`solicitud_vacaciones` (`id_solicitud_vacaciones`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+USE `PORTAL_AUTOSERVICIO_DB`;
+
+DELIMITER $$
+USE `PORTAL_AUTOSERVICIO_DB`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `PORTAL_AUTOSERVICIO_DB`.`solicitud_vacaciones_AFTER_INSERT` AFTER INSERT ON `solicitud_vacaciones` FOR EACH ROW
+BEGIN
+  INSERT INTO `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (solicitud_vacaciones_id)
+  VALUES (NEW.id_solicitud_vacaciones);
+END$$
+
+USE `PORTAL_AUTOSERVICIO_DB`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes_BEFORE_INSERT` BEFORE INSERT ON `gestion_solicitudes` FOR EACH ROW
+BEGIN
+	SET NEW.aprobacion_solicitud = IF(NEW.aprobacion_supervisor = 1 AND NEW.aprobacion_administracion = 1, 1, 0);
+END$$
+
+
+DELIMITER ;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+-- -------------------------------------------------------------------------------------
+-- ---------- Insert Data to 'equipos' ------------------------------------------------
+
+USE portal_autoservicio_db; 
+
+SELECT * FROM portal_autoservicio_db.equipos;
+
+insert into equipos (nombre_equipo, supervisor_lider) values ('Deméter', 1);
+insert into equipos (nombre_equipo, supervisor_lider) values ('Artemisa', 2);
+insert into equipos (nombre_equipo, supervisor_lider) values ('Afrodita', 3);
+insert into equipos (nombre_equipo, supervisor_lider) values ('Poseidón', 4);
+insert into equipos (nombre_equipo, supervisor_lider) values ('Hades', 5);
+insert into equipos (nombre_equipo, supervisor_lider) values ('Dionisos', 6);
+insert into equipos (nombre_equipo, supervisor_lider) values ('Hermes', 7);
+insert into equipos (nombre_equipo, supervisor_lider) values ('Apolo', 8);
+
+
+-- -------------------------------------------------------------------------------------
+-- ---------- Insert Data to 'usuarios' ------------------------------------------------
+
+USE portal_autoservicio_db; 
+
+SELECT * FROM portal_autoservicio_db.usuarios;
+
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Puff', 'Masurel', '518 977 3390', 'PO Box 83719', '2020/12/04', NULL, 'Contrato a término fijo', true, 'supervisor', 'Jefe de equipo de desarrollo', 'pmasurel0@nasa.gov', 32, 1);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Glenden', 'MacFadzean', '131 195 5139', '6th Floor', '2022/01/01', NULL, 'Contrato a término indefinido', true, 'empleado', 'Programador back-end', 'gmacfadzean1@scribd.com', 1, 1);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Cam', 'Schuricht', '366 317 0005', 'Suite 67', '2023/01/09', NULL, 'Contrato a término indefinido', true, 'empleado', 'Programador front-end', 'cschuricht3@ftc.gov', 1, 1);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Roberto', 'Taverner', '516 567 4985', 'Apt 1547', '2020/05/07', NULL, 'Contrato a término indefinido', true, 'supervisor', 'Jefe de equipo de desarrollo', 'rtaverner2@youku.com', 32, 2);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Casey', 'Demke', '350 796 0498', 'Suite 4', '2021/01/01', null, 'Contrato a término fijo', true, 'empleado', 'Diseñador web', 'cdemke4@etsy.com', 1, 1);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Morse', 'Bennison', '714 776 2914', 'PO Box 45519', '2022/09/25', null, 'Contrato a término indefinido', true, 'empleado', 'Especialista en SEO ', 'mbennison5@about.me', 1, 1);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Abbye', 'Dudson', '112 223 4076', 'Apt 505', '2020/01/27', null, 'Contrato a término indefinido', true, 'administrador', 'Gerente general', 'adudson6@cloudflare.com', null, null);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Lizbeth', 'Reasce', '955 737 9984', 'PO Box 39623', '2021/08/10', null, 'Contrato a término indefinido', true, 'supervisor', 'Jefe de equipo de desarrollo', 'lreasce7@skype.com', 36, 3);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Dorothee', 'Fairn', '996 491 5183', 'PO Box 60717', '2022/06/30', null, 'Contrato a término fijo', true, 'empleado', 'Programador back-end', 'dfairn8@tuttocitta.it', 4, 2);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Sheree', 'Veltmann', '340 646 9418', 'PO Box 34351', '2022/11/25', null, 'Contrato a término fijo', true, 'supervisor', 'Jefe de equipo de desarrollo', 'sveltmann9@jimdo.com', 36, 4);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Mirilla', 'Durrad', '873 187 2963', 'Apt 978', '2022/06/22', null, 'Contrato a término indefinido', true, 'empleado', 'Programador front-end', 'mdurrada@umn.edu', 4, 2);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Liuka', 'Gladwish', '712 506 7991', 'PO Box 16426', '2022/03/17', null, 'Contrato a término fijo', true, 'supervisor', 'Jefe de equipo de desarrollo', 'lgladwishb@blogs.com', 43, 5);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Shea', 'Ellcome', '210 494 8040', 'Room 1642', '2022/10/09', null, 'Contrato a término indefinido', true, 'empleado', 'Programador front-end', 'sellcomec@edublogs.org', 4, 2);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Evered', 'Seckom', '826 600 4819', '7th Floor', '2021/04/11', null, 'Contrato a término fijo', true, 'empleado', 'Programador back-end', 'eseckomd@google.nl', 4, 2);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Griffin', 'Longridge', '730 295 2992', 'Apt 1926', '2020/02/19', null, 'Contrato a término indefinido', true, 'administrador', 'Gerente de proyectos', 'glongridgee@xinhuanet.com', 7, null);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Concettina', 'Painter', '494 942 8214', 'Room 714', '2022/08/15', null, 'Contrato a término fijo', true, 'empleado', 'Programador back-end', 'cpainterf@cbsnews.com', 8, 3);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Felipe', 'Manes', '833 353 8644', 'Suite 79', '2022/11/04', null, 'Contrato a término fijo', true, 'supervisor', 'Jefe de equipo de desarrollo', 'fmanesg@naver.com', 43, 6);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Bourke', 'Merkle', '251 502 0910', '8th Floor', '2023/04/04', null, 'Contrato a término fijo', true, 'empleado', 'Diseñador web', 'bmerkleh@pbs.org', 8, 3);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Teirtza', 'Spurgin', '950 273 9466', '3rd Floor', '2023/04/20', null, 'Contrato a término indefinido', true, 'empleado', 'Programador full-stack', 'tspurgini@wsj.com', 8, 3);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Chandler', 'Corington', '171 807 1446', 'Apt 1170', '2022/10/12', null, 'Contrato a término indefinido', true, 'empleado', 'Especialista en SEO ', 'ccoringtonj@cpanel.net', 8, 3);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Herminia', 'le Keux', '345 711 8722', 'Suite 20', '2022/11/29', null, 'Contrato a término indefinido', true, 'empleado', 'Programador front-end', 'hlekeuxk@icq.com', 10, 4);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Candy', 'Daymont', '450 439 1120', 'Suite 91', '2022/07/05', null, 'Contrato a término fijo', true, 'empleado', 'Programador back-end', 'cdaymontl@scientificamerican.com', 10, 4);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Ruddie', 'Hein', '568 320 5452', 'Apt 1001', '2023/01/15', null, 'Contrato a término fijo', true, 'empleado', 'Programador full-stack', 'rheinm@liveinternet.ru', 10, 4);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Alexandre', 'Tedridge', '541 525 5589', 'Room 796', '2023/04/01', null, 'Contrato a término indefinido', true, 'empleado', 'Programador back-end', 'atedridgen@github.io', 10, 4);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Juana', 'Asaaf', '832 171 3903', 'PO Box 21658', '2021/04/12', null, 'Contrato a término fijo', true, 'administrador', 'Gerente de proyectos', 'jasaafo@google.com.hk', 7, null );
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Odette', 'Georger', '777 910 7441', '11th Floor', '2023/06/01', null, 'Contrato a término fijo', true, 'supervisor', 'Jefe de equipo de desarrollo', 'ogeorgerp@reddit.com', 44, 7);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Leicester', 'Trinkwon', '904 438 9094', 'Room 295', '2022/11/23', null, 'Contrato a término indefinido', true, 'empleado', 'Programador back-end', 'ltrinkwonq@eepurl.com', 12, 5);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Dugald', 'Howling', '821 328 2176', 'PO Box 29279', '2022/07/31', null, 'Contrato a término indefinido', true, 'supervisor', 'Jefe de equipo de desarrollo', 'dhowlingr@icq.com', 44, 8);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Marabel', 'Dunklee', '444 508 1984', 'PO Box 77263', '2022/08/25', null, 'Contrato a término fijo', true, 'empleado', 'Programador front-end', 'mdunklees@cdbaby.com', 12, 5);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Brett', 'Kampshell', '513 856 5034', 'Apt 1158', '2022/07/21', null, 'Contrato a término fijo', true, 'empleado', 'Especialista en SEO ', 'bkampshellt@ftc.gov', 12, 5);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Torr', 'Milksop', '610 919 4372', 'Suite 63', '2022/12/21', null, 'Contrato a término fijo', true, 'empleado', 'Programador full-stack', 'tmilksopu@icq.com', 12, 5);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Free', 'Goodband', '315 450 6736', 'Apt 434', '2022/11/16', null, 'Contrato a término fijo', true, 'supervisor', 'Líder técnico', 'fgoodbandv@netvibes.com', 15, null);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Sharla', 'Pidgen', '321 162 2960', 'Apt 855', '2023/02/11', null, 'Contrato a término fijo', true, 'empleado', 'Programador front-end', 'spidgenw@blogtalkradio.com', 17, 6);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Kaile', 'Pimlott', '570 404 1235', 'Apt 1162', '2022/09/23', null, 'Contrato a término fijo', true, 'empleado', 'Diseñador web', 'kpimlottx@vk.com', 17, 6);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Archy', 'Mees', '745 581 7651', '17th Floor', '2023/04/17', null, 'Contrato a término fijo', true, 'empleado', 'Diseñador web', 'ameesy@google.de', 17, 6);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Kathryne', 'Thoma', '868 116 1007', 'Room 316', '2022/11/07', null, 'Contrato a término fijo', true, 'supervisor', 'Líder técnico', 'kthomaz@cafepress.com', 15, null);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Everard', 'Rowney', '464 516 0811', 'Room 1089', '2023/04/25', null, 'Contrato a término fijo', true, 'empleado', 'Programador front-end', 'erowney10@chron.com', 17, 6);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Marthena', 'Moorton', '158 816 4162', 'Room 1951', '2023/05/13', null, 'Contrato a término fijo', true, 'empleado', 'Especialista en SEO ', 'mmoorton11@cnbc.com', 26, 7);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Annamaria', 'Medlen', '241 410 5442', 'PO Box 49615', '2023/03/14', null, 'Contrato a término fijo', true, 'empleado', 'Programador back-end', 'amedlen12@columbia.edu', 26, 7);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Jody', 'Aulds', '443 789 0636', 'PO Box 13158', '2023/06/16', null, 'Contrato a término indefinido', true, 'empleado', 'Programador full-stack', 'jaulds13@1und1.de', 26, 7);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Allyn', 'Annies', '269 147 5216', 'Room 454', '2022/12/30', null, 'Contrato a término indefinido', true, 'empleado', 'Diseñador web', 'aannies14@unesco.org', 26, 7);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Vevay', 'Longland', '417 587 2596', '17th Floor', '2022/10/20', null, 'Contrato a término fijo', true, 'empleado', 'Programador back-end', 'vlongland15@scientificamerican.com', 28, 8);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Maris', 'Clutten', '196 274 9684', 'PO Box 46131', '2023/01/17', null, 'Contrato a término fijo', true, 'supervisor', 'Líder técnico', 'mclutten16@skyrock.com', 25, null);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Carlene', 'McMichell', '459 864 5006', 'PO Box 70940', '2022/07/20', null, 'Contrato a término fijo', true, 'supervisor', 'Líder técnico', 'cmcmichell17@w3.org', 25, null);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Aryn', 'Torresi', '173 467 2596', '14th Floor', '2023/01/07', null, 'Contrato a término fijo', true, 'empleado', 'Especialista en SEO ', 'atorresi18@telegraph.co.uk', 28, 8);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Kenny', 'Berzin', '296 295 8026', 'Suite 21', '2020/05/29', '2022/05/29', 'Contrato a término fijo', false, 'supervisor', 'Jefe de equipo de desarrollo', 'kberzin19@mlb.com', 36, 4);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Melba', 'Jacmar', '151 904 4743', 'Suite 82', '2021/05/28', null, 'Contrato a término indefinido', true, 'empleado', 'Programador full-stack', 'mjacmar1a@acquirethisname.com', 28, 8);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Leigha', 'Menis', '524 355 1826', 'Apt 1369', '2020/09/05', '2022/09/05', 'Contrato a término fijo', false, 'supervisor', 'Jefe de equipo de desarrollo', 'lmenis1b@cornell.edu', 36, 3);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Zack', 'Garm', '305 749 8056', 'Suite 36', '2022/04/01', null, 'Contrato a término indefinido', true, 'empleado', 'Programador front-end', 'zgarm1c@dyndns.org', 28, 8);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Hewett', 'Beiderbeck', '702 365 7405', '3rd Floor', '2021/02/28', '2023/02/28', 'Contrato a término indefinido', false, 'empleado', 'Diseñador web', 'hbeiderbeck1d@pcworld.com', 1, 1);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Lula', 'Folke', '498 199 5683', 'Room 1838', '2022/12/06', '2023/03/28', 'Contrato a término indefinido', false, 'supervisor', 'Jefe de equipo de desarrollo', 'lfolke1e@paypal.com', 32, 2);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Keri', 'Wethered', '877 338 8924', 'Apt 1912', '2022/03/13', '2023/05/28', 'Contrato a término indefinido', false, 'administrador', 'Gerente de proyectos', 'kwethered1f@yale.edu', 7, null);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Wolfie', 'Willgress', '405 664 4055', 'PO Box 7406', '2022/08/04', '2023/03/28', 'Contrato a término fijo', false, 'empleado', 'Especialista en SEO ', 'wwillgress1g@bloglines.com', 4, 2);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Hali', 'Alkins', '714 697 3042', 'Apt 1468', '2022/01/22', '2022/12/22', 'Contrato a término fijo', false, 'supervisor', 'Jefe de equipo de desarrollo', 'halkins1h@ow.ly', 32, 1);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Colas', 'Kuzma', '811 711 3783', 'Room 628', '2022/06/09', '2023/06/09', 'Contrato a término fijo', false, 'empleado', 'Programador back-end', 'ckuzma1i@sina.com.cn', 8, 3);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Hanny', 'Wicher', '160 877 0141', '19th Floor', '2021/05/08', '2023/05/08', 'Contrato a término indefinido', false, 'empleado', 'Programador back-end', 'hwicher1j@yahoo.co.jp', 10, 4);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CC', 'Darby', 'Creamen', '685 667 5961', 'PO Box 51007', '2022/10/09', '2023/04/09', 'Contrato a término fijo', false, 'empleado', 'Programador front-end', 'dcreamen1k@booking.com', 12, 5);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Talya', 'Hughs', '463 276 4478', '8th Floor', '2023/01/31', '2023/04/09', 'Contrato a término indefinido', false, 'empleado', 'Programador front-end', 'thughs1l@amazon.co.jp', 17, 6);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('CE', 'Aldis', 'Canon', '652 210 4623', 'Apt 1834', '2023/02/05', '2023/06/05', 'Contrato a término fijo', false, 'empleado', 'Programador full-stack', 'acanon1m@rambler.ru', 26, 7);
+insert into usuarios (tipo_documento, nombre, apellido, celular, direccion, fecha_ingreso, fecha_retiro, tipo_contrato, estado, rol, cargo, correo, supervisor_inmediato, equipo_id) values ('PA', 'Kearney', 'Henaughan', '511 388 9208', 'Suite 86', '2022/07/17', '2023/01/29', 'Contrato a término indefinido', false, 'empleado', 'Diseñador web', 'khenaughan1n@webmd.com', 28, 8);
+
+
+-- -------------------------------------------------------------------------------------
+-- ---------- Insert Data to 'solicitud_vacaciones' ------------------------------------------------
+
+SELECT * FROM portal_autoservicio_db.solicitud_vacaciones;
+
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (4, '2022-08-01', '2022-08-04', '2022-08-05', 'mensaje de observación 1', true, true, 'disfrutadas', 2);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (6, '2022-12-20', '2022-12-26', '2022-12-27', 'mensaje de observación 2', true, true, 'disfrutadas', 2);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (3, '2022/06/20', '2023/06/23', '2023/06/24', 'mensaje de observación 3', true, true, 'disfrutadas', 3);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (3, '2023/01/15', '2023/01/17', '2023/01/18', 'mensaje de observación 2', true, true, 'disfrutadas', 6);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (2, '2023/05/10', '2023/05/12', '2023/05/13', 'mensaje de observación 4', true, true, 'cancelada', 6);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (2, '2023/06/10', '2023/06/12', '2023/06/13', 'mensaje de observación 5', true, true, 'disfrutadas', 6);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (6, '2023/01/10', '2023/01/16', '2023/01/17', 'mensaje de observación 2', true, true, 'disfrutadas', 11);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (4, '2023/06/12', '2023/06/16', '2023/06/17', 'mensaje de observación 1', true, true, 'disfrutadas', 11);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (5, '2023/04/09', '2023/04/14', '2023/04/15', 'mensaje de observación 4', true, true, 'disfrutadas', 13);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (3, '2023/06/15', '2023/06/17', '2023/06/18', 'mensaje de observación 1', true, false, 'cancelada', 13);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (4, '2021/10/11', '2021/10/14', '2021/10/15', 'mensaje de observación 1', true, true, 'disfrutadas', 14);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (6, '2022/03/15', '2022/03/20', '2022/03/21', 'mensaje de observación 3', true, true, 'disfrutadas', 14);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (3, '2022/12/15', '2022/12/17', '2022/12/18', 'mensaje de observación 4', true, true, 'disfrutadas', 16);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (4, '2023/05/10', '2023/05/13', '2023/05/14', 'mensaje de observación 3', true, true, 'disfrutadas', 16);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (2, '2023/06/15', '2023/06/16', '2023/06/17', 'mensaje de observación 2', true, true, 'disfrutadas', 18);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (6, '2023/04/20', '2023/04/25', '2023/04/26', 'mensaje de observación 1', true, true, 'disfrutadas', 20);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (2, '2023/07/30', '2023/08/01', '2023/08/02', 'mensaje de observación 2', true, true, 'pendientes de aprobación', 20);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (6, '2023/06/25', '2023/06/30', '2023/07/01', 'mensaje de observación 3', true, true, 'aprobadas', 21);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (4, '2023/04/05', '2023/04/08', '2023/04/08', 'mensaje de observación 1', true, true, 'disfrutadas', 22);
+insert into solicitud_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, estado, usuario_id) values (5, '2023/06/28', '2023/07/02', '2023/07/03', 'mensaje de observación 3', true, true, 'aprobadas', 22);
+
+
+
+-- -------------------------------------------------------------------------------------
+-- ---------- Insert Data to 'vacaciones' ------------------------------------------------
+
+SELECT * FROM portal_autoservicio_db.vacaciones;
+
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (1, '2020-2021', 4);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (2, '2021-2022', 6);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (3, '2022-2023', 3);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (4, '2020-2021', 3);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (6, '2021-2022', 2);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (7, '2022-2023', 6);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (8, '2020-2021', 4);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (9, '2021-2022', 5);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (11, '2022-2023', 4);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (12, '2020-2021', 6);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (13, '2021-2022', 3);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (14, '2022-2023', 4);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (15, '2020-2021', 2);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (16, '2021-2022', 6);
+insert into vacaciones (solicitud_vacaciones_id, periodo, dias_disfrutados) values (19, '2022-2023', 4);
+
+
+-- -------------------------------------------------------------------------------------
+-- ---------- update Data to 'gestion_solicitudes' ------------------------------------------------
+
+SELECT * FROM portal_autoservicio_db.gestion_solicitudes;
+
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '1') and (`solicitud_vacaciones_id` = '1');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '2') and (`solicitud_vacaciones_id` = '2');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '3') and (`solicitud_vacaciones_id` = '3');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '4') and (`solicitud_vacaciones_id` = '4');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = null, `aprobacion_administracion` = null, `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '5') and (`solicitud_vacaciones_id` = '5');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '6') and (`solicitud_vacaciones_id` = '6');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '7') and (`solicitud_vacaciones_id` = '7');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '8') and (`solicitud_vacaciones_id` = '8');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '9') and (`solicitud_vacaciones_id` = '9');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '11') and (`solicitud_vacaciones_id` = '11');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '0', `aprobacion_administracion` = null, `id_administrador` = '15' WHERE (`id_gestion_solicitudes` = '10') and (`solicitud_vacaciones_id` = '10');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '12') and (`solicitud_vacaciones_id` = '12');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '13') and (`solicitud_vacaciones_id` = '13');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '14') and (`solicitud_vacaciones_id` = '14');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '15') and (`solicitud_vacaciones_id` = '15');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '16') and (`solicitud_vacaciones_id` = '16');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = null, `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '17') and (`solicitud_vacaciones_id` = '17');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '18') and (`solicitud_vacaciones_id` = '18');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '19') and (`solicitud_vacaciones_id` = '19');
+UPDATE `portal_autoservicio_db`.`gestion_solicitudes` SET `aprobacion_supervisor` = '1', `aprobacion_administracion` = '1', `id_administrador` = '25' WHERE (`id_gestion_solicitudes` = '20') and (`solicitud_vacaciones_id` = '20');
+
+
+-- -------------------------------------------------------------------------------------
+-- ---------- Insert Data to 'notificaciones' ------------------------------------------------
+
+SELECT * FROM portal_autoservicio_db.notificaciones;
+
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (1, 'se a creado la solicitud del usuario con id =  2');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (2, 'se a creado la solicitud del usuario con id =  2');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (3, 'se a creado la solicitud del usuario con id =  3');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (4, 'se a creado la solicitud del usuario con id =  6');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (5, 'se a creado la solicitud del usuario con id =  6');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (6, 'se a creado la solicitud del usuario con id =  6');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (7, 'se a creado la solicitud del usuario con id =  11');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (8, 'se a creado la solicitud del usuario con id =  11');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (9, 'se a creado la solicitud del usuario con id =  13');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (10, 'se a creado la solicitud del usuario con id =  13');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (11, 'se a creado la solicitud del usuario con id =  14');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (12, 'se a creado la solicitud del usuario con id =  14');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (13, 'se a creado la solicitud del usuario con id =  16');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (14, 'se a creado la solicitud del usuario con id =  16');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (15, 'se a creado la solicitud del usuario con id =  18');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (16, 'se a creado la solicitud del usuario con id =  20');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (17, 'se a creado la solicitud del usuario con id =  20');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (18, 'se a creado la solicitud del usuario con id =  21');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (19, 'se a creado la solicitud del usuario con id =  22');
+insert into notificaciones (gestion_solicitudes_id, mensaje) values (20, 'se a creado la solicitud del usuario con id =  22');
