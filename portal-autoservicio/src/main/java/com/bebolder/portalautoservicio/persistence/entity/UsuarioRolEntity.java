@@ -17,6 +17,19 @@ public class UsuarioRolEntity {
     @JoinColumn(name = "rol_id", insertable = false, updatable = false)
     private RolEntity rol;
 
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
 
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
 
+    public RolEntity getRol() {
+        return rol;
+    }
+
+    public void setRol(RolEntity rol) {
+        this.rol = rol;
+    }
 }

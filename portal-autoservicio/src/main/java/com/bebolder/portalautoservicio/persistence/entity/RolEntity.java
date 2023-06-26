@@ -20,6 +20,27 @@ public class RolEntity {
     @OneToMany( mappedBy = "rol", cascade = {CascadeType.ALL})
     private List<UsuarioRolEntity> usuarios;
 
+    public Integer getIdRol() {
+        return idRol;
+    }
 
+    public void setIdRol(Integer idRol) {
+        this.idRol = idRol;
+    }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public List<UsuarioRolEntity> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<UsuarioRolEntity> usuarios) {
+        this.usuarios = usuarios;
+    }
 }

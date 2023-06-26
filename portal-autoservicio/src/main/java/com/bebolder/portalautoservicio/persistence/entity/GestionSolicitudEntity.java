@@ -39,5 +39,59 @@ public class GestionSolicitudEntity {
     @OneToOne(mappedBy = "gestionSolicitud", cascade = {CascadeType.ALL})
     private SolicitudVacacionesEntity solicitudVacaciones;
 
+    public Integer getIdGestionSolicitud() {
+        return idGestionSolicitud;
+    }
 
+    public void setIdGestionSolicitud(Integer idGestionSolicitud) {
+        this.idGestionSolicitud = idGestionSolicitud;
+    }
+
+    public boolean isAprobacionSupervisor() {
+        return aprobacionSupervisor;
+    }
+
+    public void setAprobacionSupervisor(boolean aprobacionSupervisor) {
+        this.aprobacionSupervisor = aprobacionSupervisor;
+    }
+
+    public boolean isAprobacionAdministracion() {
+        return aprobacionAdministracion;
+    }
+
+    public void setAprobacionAdministracion(boolean aprobacionAdministracion) {
+        this.aprobacionAdministracion = aprobacionAdministracion;
+    }
+
+    public Integer getIdAdministrador() {
+        return idAdministrador;
+    }
+
+    public void setIdAdministrador(Integer idAdministrador) {
+        this.idAdministrador = idAdministrador;
+    }
+
+    public UsuarioEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioEntity usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<NotificacionEntity> getNotificaciones() {
+        return notificaciones;
+    }
+
+    public void setNotificaciones(List<NotificacionEntity> notificaciones) {
+        this.notificaciones = notificaciones;
+    }
+
+    public SolicitudVacacionesEntity getSolicitudVacaciones() {
+        return solicitudVacaciones;
+    }
+
+    public void setSolicitudVacaciones(SolicitudVacacionesEntity solicitudVacaciones) {
+        this.solicitudVacaciones = solicitudVacaciones;
+    }
 }

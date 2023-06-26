@@ -63,13 +63,8 @@ public abstract class UsuarioEntity {
     private List<GestionSolicitudEntity> gestionSolicitud;
 
 
-
-
-
-
-
-
     // - Fin Relaciones - Creo sus setter y getter correspondientes
+
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -173,5 +168,29 @@ public abstract class UsuarioEntity {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public EquipoEntity getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(EquipoEntity equipo) {
+        this.equipo = equipo;
+    }
+
+    public List<UsuarioRolEntity> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UsuarioRolEntity> roles) {
+        this.roles = roles;
+    }
+
+    public List<GestionSolicitudEntity> getGestionSolicitud() {
+        return gestionSolicitud;
+    }
+
+    public void setGestionSolicitud(List<GestionSolicitudEntity> gestionSolicitud) {
+        this.gestionSolicitud = gestionSolicitud;
     }
 }

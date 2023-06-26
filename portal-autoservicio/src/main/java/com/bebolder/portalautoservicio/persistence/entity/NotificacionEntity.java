@@ -20,10 +20,6 @@ public class NotificacionEntity {
 
     private String mensaje;
 
-
-
-
-
     public Integer getIdNotificacion() {
         return idNotificacion;
     }
