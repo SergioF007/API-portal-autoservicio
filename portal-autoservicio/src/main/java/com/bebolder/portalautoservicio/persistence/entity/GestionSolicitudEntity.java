@@ -2,6 +2,9 @@ package com.bebolder.portalautoservicio.persistence.entity;
 
 import javax.management.Notification;
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -10,7 +13,7 @@ public class GestionSolicitudEntity {
 
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-    @Column(name = "id_gestion_solicitudes")
+    @Column(name = "id_gestion_solicitud")
     private Integer idGestionSolicitud;
 
     @Column(name = "aprobacion_supervisor")
@@ -21,6 +24,10 @@ public class GestionSolicitudEntity {
 
     @Column(name = "id_administrador")
     private Integer idAdministrador;
+
+    private String estado;
+
+    private LocalDateTime fecha;
 
 
     @ManyToOne
@@ -36,7 +43,7 @@ public class GestionSolicitudEntity {
     // relacion con el objeto de la clase  SolicitudVacacionesEntity
     // Relacion: por cada gestion_solicitudes hay una solicitud_vacaciones
     // creacion de lista de la solicudVaciones para asociarlas con un Usuarios
-    @OneToOne(mappedBy = "gestionSolicitud", cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "gestionSolicitud")
     private SolicitudVacacionesEntity solicitudVacaciones;
 
     public Integer getIdGestionSolicitud() {

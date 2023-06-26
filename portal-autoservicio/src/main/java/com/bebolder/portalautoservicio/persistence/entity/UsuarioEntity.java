@@ -52,7 +52,7 @@ public abstract class UsuarioEntity {
     private EquipoEntity equipo;
 
 
-    // relacion con tabla usuarios_roles para saber cuantos roles cuenta el usuario
+    // relacion con tabla usuarios_roles, nos sirve para saber cuantos roles cuenta el usuario
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
     private List<UsuarioRolEntity> roles;
 
@@ -61,9 +61,6 @@ public abstract class UsuarioEntity {
     // Relacion: Una usuario puede tener de 1 a muchas gestiones de solicitud
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
     private List<GestionSolicitudEntity> gestionSolicitud;
-
-
-    // - Fin Relaciones - Creo sus setter y getter correspondientes
 
 
     public Integer getIdUsuario() {

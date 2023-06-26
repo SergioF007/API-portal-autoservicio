@@ -1,6 +1,7 @@
 package com.bebolder.portalautoservicio.persistence.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -16,13 +17,13 @@ public class SolicitudVacacionesEntity {
     private Integer cantidadDias;
 
     @Column(name = "inicio_vacaciones")
-    private Date inicioVacaciones;
+    private LocalDate inicioVacaciones;
 
     @Column(name = "fin_vacaciones")
-    private Date finVacaciones;
+    private LocalDate finVacaciones;
 
     @Column(name = "fecha_reintegro")
-    private Date fechaReintegro;
+    private LocalDate fechaReintegro;
 
     private String observacion;
 
@@ -33,11 +34,14 @@ public class SolicitudVacacionesEntity {
     private boolean firmaSupervisor;
 
     @OneToOne(mappedBy = "solicitudVacaciones")
-    @JoinColumn(name = "gestion_solicitudes_id", insertable = false, updatable = false)
+    @JoinColumn(name = "gestion_solicitud_id", insertable = false, updatable = false)
     private GestionSolicitudEntity gestionSolicitud;
 
+
+    // Relacion: lista las vacaciones de una solicitud disfrutada
     @OneToMany(mappedBy = "solicitudVacaciones")
-    private VacacionesEntity vacaciones;
+    private List<VacacionesEntity> vacaciones;
+
 
     public Integer getIdSolicitudVacaciones() {
         return idSolicitudVacaciones;
@@ -55,27 +59,27 @@ public class SolicitudVacacionesEntity {
         this.cantidadDias = cantidadDias;
     }
 
-    public Date getInicioVacaciones() {
+    public LocalDate getInicioVacaciones() {
         return inicioVacaciones;
     }
 
-    public void setInicioVacaciones(Date inicioVacaciones) {
+    public void setInicioVacaciones(LocalDate inicioVacaciones) {
         this.inicioVacaciones = inicioVacaciones;
     }
 
-    public Date getFinVacaciones() {
+    public LocalDate getFinVacaciones() {
         return finVacaciones;
     }
 
-    public void setFinVacaciones(Date finVacaciones) {
+    public void setFinVacaciones(LocalDate finVacaciones) {
         this.finVacaciones = finVacaciones;
     }
 
-    public Date getFechaReintegro() {
+    public LocalDate getFechaReintegro() {
         return fechaReintegro;
     }
 
-    public void setFechaReintegro(Date fechaReintegro) {
+    public void setFechaReintegro(LocalDate fechaReintegro) {
         this.fechaReintegro = fechaReintegro;
     }
 
@@ -111,11 +115,11 @@ public class SolicitudVacacionesEntity {
         this.gestionSolicitud = gestionSolicitud;
     }
 
-    public VacacionesEntity getVacaciones() {
+    public List<VacacionesEntity> getVacaciones() {
         return vacaciones;
     }
 
-    public void setVacaciones(VacacionesEntity vacaciones) {
+    public void setVacaciones(List<VacacionesEntity> vacaciones) {
         this.vacaciones = vacaciones;
     }
 }

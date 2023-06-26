@@ -15,7 +15,7 @@ public class NotificacionEntity {
     // atributo relacion con el objeto de la clase gestionSolicitudEntity
     // Relacion: desde muchas hasta una NOTIFICAION puede tener una GESTION DE SOLICTUD
     @ManyToOne
-    @JoinColumn(name = "gestion_solicitudes_id", insertable = false, updatable = false)
+    @JoinColumn(name = "gestion_solicitud_id", insertable = false, updatable = false)
     private GestionSolicitudEntity gestionSolicitud;
 
     private String mensaje;
