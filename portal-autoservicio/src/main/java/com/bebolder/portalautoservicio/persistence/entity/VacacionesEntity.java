@@ -10,14 +10,18 @@ public class VacacionesEntity {
     @Column(name = "id_vacaciones")
     private Integer idVacaciones;
 
-    @ManyToOne
-    @JoinColumn(name = "solicitud_vacaciones_id", insertable = false, updatable = false)
-    private SolicitudVacacionesEntity solicitudVacaciones;
-
+    @Column(name = "solicitud_vacaciones_id")
+    private Integer solicitudVacionesId;
     private String periodo;
 
     @Column(name = "dias_disfrutados")
     private Integer diasDisfrutados;
+
+    // Relaciones
+    @ManyToOne
+    @JoinColumn(name = "solicitud_vacaciones_id", insertable = false, updatable = false)
+    private SolicitudVacacionesEntity solicitudVacaciones;
+
 
     public Integer getIdVacaciones() {
         return idVacaciones;

@@ -1,7 +1,5 @@
 package com.bebolder.portalautoservicio.persistence.entity;
 
-import org.springframework.context.annotation.EnableMBeanExport;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -18,7 +16,7 @@ public class RolEntity {
 
     //Relacion para listar Usuarios por rol
     @OneToMany( mappedBy = "rol", cascade = {CascadeType.ALL})
-    private List<UsuarioRolEntity> usuarios;
+    private List<UsuarioRolEntity> usuariosRol;
 
     public Integer getIdRol() {
         return idRol;
@@ -36,11 +34,11 @@ public class RolEntity {
         this.tipo = tipo;
     }
 
-    public List<UsuarioRolEntity> getUsuarios() {
-        return usuarios;
+    public List<UsuarioRolEntity> getUsuariosRol() {
+        return usuariosRol;
     }
 
-    public void setUsuarios(List<UsuarioRolEntity> usuarios) {
-        this.usuarios = usuarios;
+    public void setUsuariosRol(List<UsuarioRolEntity> usuariosRol) {
+        this.usuariosRol = usuariosRol;
     }
 }

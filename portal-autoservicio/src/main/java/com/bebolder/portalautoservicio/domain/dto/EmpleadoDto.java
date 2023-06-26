@@ -1,4 +1,6 @@
 package com.bebolder.portalautoservicio.domain.dto;
 
-public class RequestManagement {
+public class EmpleadoDto extends UsuarioDto {
+
+
 }

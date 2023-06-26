@@ -1,41 +1,27 @@
-package com.bebolder.portalautoservicio.persistence.entity;
+package com.bebolder.portalautoservicio.domain.dto;
 
-import javax.persistence.*;
-import javax.xml.crypto.Data;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "usuarios")
-public abstract class UsuarioEntity {
+public abstract class UsuarioDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_usuario")
-    private Integer idUsuario;
+    private Integer usuarioId;
 
-    @Column(name = "tipo_documento")
     private String tipoDocumento;
 
     private String documento;
 
     private String nombre;
 
-    private  String apellidos;
+    private String apellidos;
 
     private String celular;
 
-    private String direccion;
+    private LocalDate direccion;
 
-    @Column(name = "fecha_ingreso")
     private LocalDate fechaIngreso;
 
-    @Column(name = "fecha_retiro")
     private LocalDate fechaRetiro;
-
-    @Column(name = "tipo_contrato")
-    private String tipoContrato;
 
     private boolean estado;
 
@@ -43,35 +29,18 @@ public abstract class UsuarioEntity {
 
     private String correo;
 
-    @Column(name = "equipo_id")
-    private Integer equipoId;
+    private EquipoDto equipo;
 
+    private List<UsuarioRolDto> roles;
 
-    // - Inicio Relaciones
+    private List<GestionSolicitudDto> gestionSolicitud;
 
-    // relacion con Tabla equipos
-    @ManyToOne
-    @JoinColumn(name = "equipo_id", insertable = false, updatable = false )
-    private EquipoEntity equipo;
-
-
-    // relacion con tabla usuarios_roles, nos sirve para saber cuantos roles cuenta el usuario
-    @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
-    private List<RolEntity> roles;
-
-
-    // Listar las gestiones de solicitud por ususarios
-    // Relacion: Una usuario puede tener de 1 a muchas gestiones de solicitud
-    @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
-    private List<GestionSolicitudEntity> gestionSolicitud;
-
-
-    public Integer getIdUsuario() {
-        return idUsuario;
+    public Integer getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public String getTipoDocumento() {
@@ -114,11 +83,11 @@ public abstract class UsuarioEntity {
         this.celular = celular;
     }
 
-    public String getDireccion() {
+    public LocalDate getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(String direccion) {
+    public void setDireccion(LocalDate direccion) {
         this.direccion = direccion;
     }
 
@@ -136,14 +105,6 @@ public abstract class UsuarioEntity {
 
     public void setFechaRetiro(LocalDate fechaRetiro) {
         this.fechaRetiro = fechaRetiro;
-    }
-
-    public String getTipoContrato() {
-        return tipoContrato;
-    }
-
-    public void setTipoContrato(String tipoContrato) {
-        this.tipoContrato = tipoContrato;
     }
 
     public boolean isEstado() {
@@ -170,27 +131,27 @@ public abstract class UsuarioEntity {
         this.correo = correo;
     }
 
-    public EquipoEntity getEquipo() {
+    public EquipoDto getEquipo() {
         return equipo;
     }
 
-    public void setEquipo(EquipoEntity equipo) {
+    public void setEquipo(EquipoDto equipo) {
         this.equipo = equipo;
     }
 
-    public List<RolEntity> getRoles() {
+    public List<UsuarioRolDto> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RolEntity> roles) {
+    public void setRoles(List<UsuarioRolDto> roles) {
         this.roles = roles;
     }
 
-    public List<GestionSolicitudEntity> getGestionSolicitud() {
+    public List<GestionSolicitudDto> getGestionSolicitud() {
         return gestionSolicitud;
     }
 
-    public void setGestionSolicitud(List<GestionSolicitudEntity> gestionSolicitud) {
+    public void setGestionSolicitud(List<GestionSolicitudDto> gestionSolicitud) {
         this.gestionSolicitud = gestionSolicitud;
     }
 }

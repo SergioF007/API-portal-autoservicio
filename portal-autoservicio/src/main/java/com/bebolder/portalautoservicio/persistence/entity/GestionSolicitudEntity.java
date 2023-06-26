@@ -29,6 +29,9 @@ public class GestionSolicitudEntity {
 
     private LocalDateTime fecha;
 
+    @Column(name = "usuario_id")
+    private Integer usuarioId;
+
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
@@ -76,6 +79,30 @@ public class GestionSolicitudEntity {
 
     public void setIdAdministrador(Integer idAdministrador) {
         this.idAdministrador = idAdministrador;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public Integer getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     public UsuarioEntity getUsuario() {

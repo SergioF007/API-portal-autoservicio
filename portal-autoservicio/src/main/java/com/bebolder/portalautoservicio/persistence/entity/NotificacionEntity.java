@@ -11,14 +11,18 @@ public class NotificacionEntity {
     @Column(name = "id_notificaion")
     private Integer idNotificacion;
 
+    @Column(name = "gestion_solicitud_id")
+    private Integer gestionSolicitudId;
+
+    private String mensaje;
+
+    // Relaciones
 
     // atributo relacion con el objeto de la clase gestionSolicitudEntity
     // Relacion: desde muchas hasta una NOTIFICAION puede tener una GESTION DE SOLICTUD
     @ManyToOne
     @JoinColumn(name = "gestion_solicitud_id", insertable = false, updatable = false)
     private GestionSolicitudEntity gestionSolicitud;
-
-    private String mensaje;
 
     public Integer getIdNotificacion() {
         return idNotificacion;

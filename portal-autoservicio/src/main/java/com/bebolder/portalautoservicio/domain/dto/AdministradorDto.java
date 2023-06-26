@@ -1,4 +1,4 @@
 package com.bebolder.portalautoservicio.domain.dto;
 
-public class RequestVacation {
+public class AdministradorDto extends UsuarioDto{
 }

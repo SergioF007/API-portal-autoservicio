@@ -1,4 +1,6 @@
 package com.bebolder.portalautoservicio.domain.dto;
 
-public class User {
+public class SupervisorDto extends UsuarioDto{
+
+
 }

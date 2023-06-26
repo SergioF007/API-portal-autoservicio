@@ -1,4 +1,4 @@
-package com.bebolder.portalautoservicio.persistence.mapper;
+package com.bebolder.portalautoservicio.persistence.repository;
 
 import org.springframework.stereotype.Repository;
 

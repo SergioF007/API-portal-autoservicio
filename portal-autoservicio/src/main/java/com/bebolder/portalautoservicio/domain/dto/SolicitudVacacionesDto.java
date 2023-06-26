@@ -1,60 +1,35 @@
-package com.bebolder.portalautoservicio.persistence.entity;
+package com.bebolder.portalautoservicio.domain.dto;
 
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
-@Entity
-@Table(name = "solicitudes_vacaciones")
-public class SolicitudVacacionesEntity {
+public class SolicitudVacacionesDto {
 
-    @Id
-    @Column(name = "id_solicitud_vacaciones")
-    private Integer idSolicitudVacaciones;
+    private Integer SolicitudVacacionesId;
 
-    @Column(name = "cantidad_dias")
     private Integer cantidadDias;
 
-    @Column(name = "inicio_vacaciones")
     private LocalDate inicioVacaciones;
 
-    @Column(name = "fin_vacaciones")
     private LocalDate finVacaciones;
 
-    @Column(name = "fecha_reintegro")
     private LocalDate fechaReintegro;
 
     private String observacion;
 
-    @Column(name = "firma_empleado")
     private boolean firmaEmpleado;
 
-    @Column(name = "firma_supervisor")
     private boolean firmaSupervisor;
 
-    @Column(name = "gestion_solicitud_id")
     private Integer gestionSolicitudId;
 
-    // Incio Relaciones
+    private GestionSolicitudDto gestionSolicitud;
 
-    // tomar la solicitudVacaciones asociada a la gestionSolicitud
-    @OneToOne(mappedBy = "solicitudVacaciones")
-    @JoinColumn(name = "gestion_solicitud_id", insertable = false, updatable = false)
-    private GestionSolicitudEntity gestionSolicitud;
-
-
-    // Relacion: lista las vacaciones de una solicitud disfrutada
-    @OneToMany(mappedBy = "solicitudVacaciones")
-    private List<VacacionesEntity> vacaciones;
-
-
-    public Integer getIdSolicitudVacaciones() {
-        return idSolicitudVacaciones;
+    public Integer getSolicitudVacacionesId() {
+        return SolicitudVacacionesId;
     }
 
-    public void setIdSolicitudVacaciones(Integer idSolicitudVacaciones) {
-        this.idSolicitudVacaciones = idSolicitudVacaciones;
+    public void setSolicitudVacacionesId(Integer solicitudVacacionesId) {
+        SolicitudVacacionesId = solicitudVacacionesId;
     }
 
     public Integer getCantidadDias() {
@@ -113,19 +88,13 @@ public class SolicitudVacacionesEntity {
         this.firmaSupervisor = firmaSupervisor;
     }
 
-    public GestionSolicitudEntity getGestionSolicitud() {
-        return gestionSolicitud;
+    public Integer getGestionSolicitudId() {
+        return gestionSolicitudId;
     }
 
-    public void setGestionSolicitud(GestionSolicitudEntity gestionSolicitud) {
-        this.gestionSolicitud = gestionSolicitud;
+    public void setGestionSolicitudId(Integer gestionSolicitudId) {
+        this.gestionSolicitudId = gestionSolicitudId;
     }
 
-    public List<VacacionesEntity> getVacaciones() {
-        return vacaciones;
-    }
 
-    public void setVacaciones(List<VacacionesEntity> vacaciones) {
-        this.vacaciones = vacaciones;
-    }
 }
