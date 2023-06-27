@@ -4,7 +4,7 @@ public class UsuarioRolDto {
 
     private Integer usuarioId;
 
-    private Integer rolID;
+    private Integer rolId;
 
     private UsuarioDto usuario;
 
@@ -18,12 +18,12 @@ public class UsuarioRolDto {
         this.usuarioId = usuarioId;
     }
 
-    public Integer getRolID() {
-        return rolID;
+    public Integer getRolId() {
+        return rolId;
     }
 
-    public void setRolID(Integer rolID) {
-        this.rolID = rolID;
+    public void setRolId(Integer rolId) {
+        this.rolId = rolId;
     }
 
     public UsuarioDto getUsuario() {
