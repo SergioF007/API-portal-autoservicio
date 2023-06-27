@@ -170,6 +170,15 @@ public abstract class UsuarioEntity {
         this.correo = correo;
     }
 
+
+    public Integer getEquipoId() {
+        return equipoId;
+    }
+
+    public void setEquipoId(Integer equipoId) {
+        this.equipoId = equipoId;
+    }
+
     public EquipoEntity getEquipo() {
         return equipo;
     }

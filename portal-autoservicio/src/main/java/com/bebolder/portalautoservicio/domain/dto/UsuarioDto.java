@@ -23,17 +23,16 @@ public abstract class UsuarioDto {
 
     private LocalDate fechaRetiro;
 
+    private String tipoContrato;
+
     private boolean estado;
 
     private String cargo;
 
     private String correo;
 
-    private EquipoDto equipo;
+    private Integer equipoId;
 
-    private List<UsuarioRolDto> roles;
-
-    private List<GestionSolicitudDto> gestionSolicitud;
 
     public Integer getUsuarioId() {
         return usuarioId;
@@ -107,6 +106,14 @@ public abstract class UsuarioDto {
         this.fechaRetiro = fechaRetiro;
     }
 
+    public String getTipoContrato() {
+        return tipoContrato;
+    }
+
+    public void setTipoContrato(String tipoContrato) {
+        this.tipoContrato = tipoContrato;
+    }
+
     public boolean isEstado() {
         return estado;
     }
@@ -131,27 +138,11 @@ public abstract class UsuarioDto {
         this.correo = correo;
     }
 
-    public EquipoDto getEquipo() {
-        return equipo;
+    public Integer getEquipoId() {
+        return equipoId;
     }
 
-    public void setEquipo(EquipoDto equipo) {
-        this.equipo = equipo;
-    }
-
-    public List<UsuarioRolDto> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<UsuarioRolDto> roles) {
-        this.roles = roles;
-    }
-
-    public List<GestionSolicitudDto> getGestionSolicitud() {
-        return gestionSolicitud;
-    }
-
-    public void setGestionSolicitud(List<GestionSolicitudDto> gestionSolicitud) {
-        this.gestionSolicitud = gestionSolicitud;
+    public void setEquipoId(Integer equipoId) {
+        this.equipoId = equipoId;
     }
 }
