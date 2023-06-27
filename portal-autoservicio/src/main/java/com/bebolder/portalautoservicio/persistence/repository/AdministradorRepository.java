@@ -1,7 +1,6 @@
 package com.bebolder.portalautoservicio.persistence.repository;
 
 import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
-import com.bebolder.portalautoservicio.domain.dto.UsuarioDto;
 import com.bebolder.portalautoservicio.domain.repository.AdministradorDtoRepository;
 import com.bebolder.portalautoservicio.persistence.crud.AdministradorCrudRepository;
 import com.bebolder.portalautoservicio.persistence.entity.AdministradorEntity;
@@ -27,18 +26,18 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     // trear todos los usuarios
 
     @Override
-    public List<UsuarioDto> getAll() {
+    public List<AdministradorDto> getAll() {
 
-        List<UsuarioEntity> usuarios = (List<UsuarioEntity>) administradorCrudRepository.findAll();
+        List<AdministradorEntity> usuarios = (List<AdministradorEntity>) administradorCrudRepository.findAll();
         return mapper.toUsuarios(usuarios);
     }
 
     // traer los Usuarios segun su rolId
     @Override
-    public Optional<List<UsuarioDto>> getUsersByRol(int rolId) {
+    public Optional<List<AdministradorDto>> getUsersByRol(int rolId) {
 
         List<Integer> userIds = usuarioRolRepositroy.getByRolId(rolId);
-        List<UsuarioEntity> usuarios = administradorCrudRepository.getUsersByRol(userIds);
+        List<AdministradorEntity> usuarios = administradorCrudRepository.getUsersByRol(userIds);
         return Optional.of(mapper.toUsuarios(usuarios));
 
     }

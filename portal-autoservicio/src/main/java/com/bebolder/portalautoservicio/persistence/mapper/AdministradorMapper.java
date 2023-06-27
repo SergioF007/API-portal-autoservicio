@@ -19,7 +19,7 @@ public interface AdministradorMapper {
 
     })
     AdministradorDto toUsuarioDto(AdministradorEntity administradorEntity);
-    List<UsuarioDto> toUsuarios(List<UsuarioEntity> administradorEntities);
+    List<AdministradorDto> toUsuarios(List<AdministradorEntity> administradorEntities);
 
 
     @InheritInverseConfiguration
