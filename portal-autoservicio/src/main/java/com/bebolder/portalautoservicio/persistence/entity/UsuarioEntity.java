@@ -57,7 +57,7 @@ public abstract class UsuarioEntity {
 
     // relacion con tabla usuarios_roles, nos sirve para saber cuantos roles cuenta el usuario
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
-    private List<RolEntity> roles;
+    private List<UsuarioRolEntity> roles;
 
 
     // Listar las gestiones de solicitud por ususarios
@@ -187,11 +187,11 @@ public abstract class UsuarioEntity {
         this.equipo = equipo;
     }
 
-    public List<RolEntity> getRoles() {
+    public List<UsuarioRolEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RolEntity> roles) {
+    public void setRoles(List<UsuarioRolEntity> roles) {
         this.roles = roles;
     }
 

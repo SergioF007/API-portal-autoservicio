@@ -43,11 +43,14 @@ public class GestionSolicitudEntity {
     @OneToMany(mappedBy = "gestionSolicitud", cascade = {CascadeType.ALL})  // vamos a adicionarle que los notificaciones se van a guardar en cascada
     private List<NotificacionEntity> notificaciones;
 
+
     // relacion con el objeto de la clase  SolicitudVacacionesEntity
     // Relacion: por cada gestion_solicitudes hay una solicitud_vacaciones
     // creacion de lista de la solicudVaciones para asociarlas con un Usuarios
     @OneToOne(mappedBy = "gestionSolicitud")
     private SolicitudVacacionesEntity solicitudVacaciones;
+
+
 
     public Integer getIdGestionSolicitud() {
         return idGestionSolicitud;

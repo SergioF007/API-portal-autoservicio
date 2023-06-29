@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "usuarios_roles")
 public class UsuarioRolEntity {
 
+    @Id
     @Column(name = "usuario_id")
     private Integer usuarioId;
 

@@ -39,7 +39,7 @@ public class SolicitudVacacionesEntity {
     // Incio Relaciones
 
     // tomar la solicitudVacaciones asociada a la gestionSolicitud
-    @OneToOne(mappedBy = "solicitudVacaciones")
+    @OneToOne
     @JoinColumn(name = "gestion_solicitud_id", insertable = false, updatable = false)
     private GestionSolicitudEntity gestionSolicitud;
 

@@ -3,6 +3,7 @@ package com.bebolder.portalautoservicio.web.controller;
 import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
 import com.bebolder.portalautoservicio.domain.service.AdministradorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,7 @@ public class AdministradorDtoController {
     @Autowired
     private AdministradorService administradorService;
 
+    @GetMapping("/all")
     public List<AdministradorDto> getAll() {
         return administradorService.getAll();
     }
