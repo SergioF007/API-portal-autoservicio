@@ -2,6 +2,7 @@ package com.bebolder.portalautoservicio.web.controller;
 
 import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
 import com.bebolder.portalautoservicio.domain.service.AdministradorService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,13 @@ public class AdministradorDtoController {
     private AdministradorService administradorService;
 
     @GetMapping("/all")
+    @ApiOperation("GET all Usuarios")
     public ResponseEntity<List<AdministradorDto>> getAll() {
         return new ResponseEntity<>(administradorService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/rolId/{Id}")
+    @ApiOperation("GET Usuarios By RolId")
     public ResponseEntity<List<AdministradorDto>> getUserByRol(@PathVariable("Id") int rolId) {
         return administradorService.getUserByRol(rolId)
                 .map(administradorDtos -> new ResponseEntity<>(administradorDtos, HttpStatus.OK))
@@ -30,6 +33,7 @@ public class AdministradorDtoController {
     }
 
     @GetMapping("/{Id}")
+    @ApiOperation("GET Usuarios By Id")
     public ResponseEntity<AdministradorDto> getUsuario(@PathVariable("Id") int usuarioId) {
         return administradorService.getUsuario(usuarioId)
                 .map(administradorDto -> new ResponseEntity<>(administradorDto, HttpStatus.OK))
@@ -37,11 +41,13 @@ public class AdministradorDtoController {
     }
 
     @PostMapping("/save")
+    @ApiOperation("Save Usuario")
     public ResponseEntity<AdministradorDto> save(@RequestBody AdministradorDto administradorDto) {
         return new ResponseEntity<>(administradorService.save(administradorDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{Id}")
+    @ApiOperation("Delete a Usuarios Whit a Id")
     public ResponseEntity delete(@PathVariable("Id") int usuarioId) {
         if (administradorService.delete(usuarioId)) {
             return new ResponseEntity<>(HttpStatus.OK);
