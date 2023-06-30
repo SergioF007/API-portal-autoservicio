@@ -7,7 +7,4 @@ import javax.persistence.Table;
 @Table(name = "usuarios")
 public class EmpleadoEntity extends UsuarioEntity {
 
-
-
-
 }

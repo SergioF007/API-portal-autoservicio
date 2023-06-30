@@ -15,7 +15,7 @@ public class UsuarioRolEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
-    private UsuarioEntity usuario;
+    private AdministradorEntity usuario;
 
     @ManyToOne
     @JoinColumn(name = "rol_id", insertable = false, updatable = false)
@@ -37,11 +37,11 @@ public class UsuarioRolEntity {
         this.rolId = rolId;
     }
 
-    public UsuarioEntity getUsuario() {
+    public AdministradorEntity getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(UsuarioEntity usuario) {
+    public void setUsuario(AdministradorEntity usuario) {
         this.usuario = usuario;
     }
 

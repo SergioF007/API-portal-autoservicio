@@ -19,7 +19,7 @@ public class EquipoEntity {
     private Integer supervisorEquipo;
 
     @OneToMany(mappedBy = "equipo", cascade = {CascadeType.ALL})
-    private List<UsuarioEntity> usuarios;
+    private List<AdministradorEntity> usuarios;
 
     public Integer getIdEquipo() {
         return idEquipo;
@@ -45,11 +45,11 @@ public class EquipoEntity {
         this.supervisorEquipo = supervisorEquipo;
     }
 
-    public List<UsuarioEntity> getUsuarios() {
+    public List<AdministradorEntity> getUsuarios() {
         return usuarios;
     }
 
-    public void setUsuarios(List<UsuarioEntity> usuarios) {
+    public void setUsuarios(List<AdministradorEntity> usuarios) {
         this.usuarios = usuarios;
     }
 }

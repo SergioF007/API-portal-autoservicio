@@ -6,65 +6,46 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Entity
-@Table(name = "usuarios")
+@MappedSuperclass
 public abstract class UsuarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_usuario")
     private Integer idUsuario;
-
     @Column(name = "tipo_documento")
     private String tipoDocumento;
-
     private String documento;
-
     private String nombre;
-
     private  String apellidos;
-
     private String celular;
-
     private String direccion;
-
     @Column(name = "fecha_ingreso")
     private LocalDate fechaIngreso;
-
     @Column(name = "fecha_retiro")
     private LocalDate fechaRetiro;
-
     @Column(name = "tipo_contrato")
     private String tipoContrato;
-
     private boolean estado;
-
     private String cargo;
-
     private String correo;
-
     @Column(name = "equipo_id")
     private Integer equipoId;
 
-
     // - Inicio Relaciones
-
     // relacion con Tabla equipos
     @ManyToOne
     @JoinColumn(name = "equipo_id", insertable = false, updatable = false )
     private EquipoEntity equipo;
 
-
     // relacion con tabla usuarios_roles, nos sirve para saber cuantos roles cuenta el usuario
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
     private List<UsuarioRolEntity> roles;
-
 
     // Listar las gestiones de solicitud por ususarios
     // Relacion: Una usuario puede tener de 1 a muchas gestiones de solicitud
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
     private List<GestionSolicitudEntity> gestionSolicitud;
-
 
     public Integer getIdUsuario() {
         return idUsuario;

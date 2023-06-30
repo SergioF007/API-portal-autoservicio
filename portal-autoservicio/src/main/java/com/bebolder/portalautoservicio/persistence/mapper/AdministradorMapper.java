@@ -11,11 +11,13 @@ import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(componentModel =  "spring")
+@Mapper(componentModel = "spring", uses = {EquipoMapper.class})
 public interface AdministradorMapper {
 
+
     @Mappings({
-            @Mapping(source = "idUsuario", target = "usuarioId")
+            @Mapping(source = "idUsuario", target = "usuarioId"),
+            @Mapping(source = "equipo", target = "equipoDto"),
 
     })
     AdministradorDto toUsuarioDto(AdministradorEntity administradorEntity);
@@ -24,13 +26,10 @@ public interface AdministradorMapper {
 
     @InheritInverseConfiguration
     @Mappings({
-            @Mapping(target = "equipo", ignore = true),
             @Mapping(target = "roles", ignore = true),
             @Mapping(target = "gestionSolicitud", ignore = true),
 
     })
     AdministradorEntity toUsuarioEntity(AdministradorDto administradorDto);
-
-
 
 }

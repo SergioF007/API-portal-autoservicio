@@ -4,20 +4,18 @@ import java.util.List;
 
 public class EquipoDto {
 
-    private Integer idEquipo;
+    private int equipoId;
 
     private String nombreEquipo;
 
-    private Integer supervisorEquipo;
+    private int supervisorEquipo;
 
-    private List<UsuarioDto> usuarios;
-
-    public Integer getIdEquipo() {
-        return idEquipo;
+    public int getEquipoId() {
+        return equipoId;
     }
 
-    public void setIdEquipo(Integer idEquipo) {
-        this.idEquipo = idEquipo;
+    public void setEquipoId(int equipoId) {
+        this.equipoId = equipoId;
     }
 
     public String getNombreEquipo() {
@@ -28,19 +26,11 @@ public class EquipoDto {
         this.nombreEquipo = nombreEquipo;
     }
 
-    public Integer getSupervisorEquipo() {
+    public int getSupervisorEquipo() {
         return supervisorEquipo;
     }
 
-    public void setSupervisorEquipo(Integer supervisorEquipo) {
+    public void setSupervisorEquipo(int supervisorEquipo) {
         this.supervisorEquipo = supervisorEquipo;
-    }
-
-    public List<UsuarioDto> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(List<UsuarioDto> usuarios) {
-        this.usuarios = usuarios;
     }
 }

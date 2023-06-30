@@ -5,40 +5,28 @@ import java.util.List;
 
 public abstract class UsuarioDto {
 
-    private Integer usuarioId;
-
+    private int usuarioId;
     private String tipoDocumento;
-
     private String documento;
-
     private String nombre;
-
     private String apellidos;
-
     private String celular;
-
-    private LocalDate direccion;
-
+    private String direccion;
     private LocalDate fechaIngreso;
-
     private LocalDate fechaRetiro;
-
     private String tipoContrato;
-
     private boolean estado;
-
     private String cargo;
-
     private String correo;
+    private int equipoId;
 
-    private Integer equipoId;
+    private EquipoDto equipoDto;
 
-
-    public Integer getUsuarioId() {
+    public int getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(Integer usuarioId) {
+    public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
     }
 
@@ -82,11 +70,11 @@ public abstract class UsuarioDto {
         this.celular = celular;
     }
 
-    public LocalDate getDireccion() {
+    public String getDireccion() {
         return direccion;
     }
 
-    public void setDireccion(LocalDate direccion) {
+    public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 
@@ -138,11 +126,19 @@ public abstract class UsuarioDto {
         this.correo = correo;
     }
 
-    public Integer getEquipoId() {
+    public int getEquipoId() {
         return equipoId;
     }
 
-    public void setEquipoId(Integer equipoId) {
+    public void setEquipoId(int equipoId) {
         this.equipoId = equipoId;
+    }
+
+    public EquipoDto getEquipoDto() {
+        return equipoDto;
+    }
+
+    public void setEquipoDto(EquipoDto equipoDto) {
+        this.equipoDto = equipoDto;
     }
 }

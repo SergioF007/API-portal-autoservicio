@@ -35,7 +35,7 @@ public class GestionSolicitudEntity {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
-    private UsuarioEntity usuario;
+    private AdministradorEntity usuario;
 
 
     // Listar las notificaciones vinculadas a una gestionSolicitud
@@ -108,11 +108,11 @@ public class GestionSolicitudEntity {
         this.usuarioId = usuarioId;
     }
 
-    public UsuarioEntity getUsuario() {
+    public AdministradorEntity getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(UsuarioEntity usuario) {
+    public void setUsuario(AdministradorEntity usuario) {
         this.usuario = usuario;
     }
 
