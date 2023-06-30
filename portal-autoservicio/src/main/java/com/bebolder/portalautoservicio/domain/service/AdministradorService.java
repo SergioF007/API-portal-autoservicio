@@ -24,9 +24,21 @@ public class AdministradorService {
         return administradorDtoRepository.getUsersByRol(rolId);
     }
 
+    public Optional<AdministradorDto> getUsuario(int usuarioId) {
+        return administradorDtoRepository.getUsuario(usuarioId);
+    }
+
     public AdministradorDto save(AdministradorDto administradorDto) {
 
         return administradorDtoRepository.save(administradorDto);
+    }
+
+    public boolean delete(int usuarioId) {
+        // primero valimado si encontrmaos el usuario y luego si lo elimnamos
+        return getUsuario(usuarioId)
+                .map(administradorDto -> {administradorDtoRepository.delete(usuarioId);
+                return true;
+                }).orElse(false);
     }
 
 }

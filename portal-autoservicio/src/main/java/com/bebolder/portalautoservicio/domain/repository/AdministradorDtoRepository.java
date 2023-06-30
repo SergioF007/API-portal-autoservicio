@@ -9,7 +9,11 @@ public interface AdministradorDtoRepository {
 
     List<AdministradorDto> getAll();
 
+    Optional<AdministradorDto> getUsuario(int usuarioId);
+
     Optional<List<AdministradorDto>> getUsersByRol(int rolId);
 
     AdministradorDto save(AdministradorDto administradorDto);
+
+    void delete(int usuarioId);
 }

@@ -29,8 +29,24 @@ public class AdministradorDtoController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/{Id}")
+    public ResponseEntity<AdministradorDto> getUsuario(@PathVariable("Id") int usuarioId) {
+        return administradorService.getUsuario(usuarioId)
+                .map(administradorDto -> new ResponseEntity<>(administradorDto, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PostMapping("/save")
     public ResponseEntity<AdministradorDto> save(@RequestBody AdministradorDto administradorDto) {
         return new ResponseEntity<>(administradorService.save(administradorDto), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete/{Id}")
+    public ResponseEntity delete(@PathVariable("Id") int usuarioId) {
+        if (administradorService.delete(usuarioId)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

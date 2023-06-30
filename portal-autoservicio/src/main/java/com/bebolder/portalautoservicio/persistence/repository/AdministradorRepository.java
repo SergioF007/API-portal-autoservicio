@@ -4,7 +4,6 @@ import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
 import com.bebolder.portalautoservicio.domain.repository.AdministradorDtoRepository;
 import com.bebolder.portalautoservicio.persistence.crud.AdministradorCrudRepository;
 import com.bebolder.portalautoservicio.persistence.entity.AdministradorEntity;
-import com.bebolder.portalautoservicio.persistence.entity.UsuarioEntity;
 import com.bebolder.portalautoservicio.persistence.mapper.AdministradorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -31,6 +30,11 @@ public class AdministradorRepository implements AdministradorDtoRepository {
         List<AdministradorEntity> usuarios = (List<AdministradorEntity>) administradorCrudRepository.findAll();
         return mapper.toUsuarios(usuarios);
     }
+    @Override
+    public Optional<AdministradorDto> getUsuario(int usuarioId) {
+        return administradorCrudRepository.findById(usuarioId)
+                .map(administradorEntity -> mapper.toUsuarioDto(administradorEntity));
+    }
 
     // traer los Usuarios segun su rolId
     @Override
@@ -49,6 +53,9 @@ public class AdministradorRepository implements AdministradorDtoRepository {
         // se esta esta converesion porque save esperea es un objeto de AdministradorEntity no de AdministradorDto
         return mapper.toUsuarioDto(administradorCrudRepository.save(usuario));
     }
-
+    @Override
+    public void delete(int usuarioId) {
+        administradorCrudRepository.deleteById(usuarioId);
+    }
 
 }
