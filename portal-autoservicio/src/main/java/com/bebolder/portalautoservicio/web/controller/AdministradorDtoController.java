@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,8 +25,11 @@ public class AdministradorDtoController {
         return new ResponseEntity<>(administradorService.getAll(), HttpStatus.OK);
     }
 
-    public Optional<List<AdministradorDto>> getUserByRol(int rolId) {
-        return administradorService.getUserByRol(rolId);
+    @GetMapping("/rolId/{Id}")
+    public ResponseEntity<List<AdministradorDto>> getUserByRol(@PathVariable("Id") int rolId) {
+        return administradorService.getUserByRol(rolId)
+                .map(administradorDtos -> new ResponseEntity<>(administradorDtos, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     public AdministradorDto save(AdministradorDto administradorDto) {
