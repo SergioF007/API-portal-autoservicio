@@ -12,30 +12,26 @@ import java.util.List;
 public class GestionSolicitudEntity {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
     @Column(name = "id_gestion_solicitud")
     private Integer idGestionSolicitud;
+
+    @Column(name = "solicitud_vacaciones_id")
+    private Integer solicitudVacacionesId;
 
     @Column(name = "aprobacion_supervisor")
     private boolean aprobacionSupervisor;
 
-    @Column(name = "aprobacion_administracion")
-    private boolean aprobacionAdministracion;
-
-    @Column(name = "id_administrador")
-    private Integer idAdministrador;
+    @Column(name = "aprobacion_administrador")
+    private boolean aprobacionAdministrador;
 
     private String estado;
 
     private LocalDateTime fecha;
 
-    @Column(name = "usuario_id")
-    private Integer usuarioId;
-
-
-    @ManyToOne
-    @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
-    private AdministradorEntity usuario;
+    // tomar la solicitud de vacaciones asociada a la gestion solicitud
+    @OneToOne
+    @JoinColumn(name = "solicitud_vacaciones_id", insertable = false, updatable = false)
+    private SolicitudVacacionesEntity solicitudVacaciones;
 
 
     // Listar las notificaciones vinculadas a una gestionSolicitud
@@ -43,14 +39,9 @@ public class GestionSolicitudEntity {
     @OneToMany(mappedBy = "gestionSolicitud", cascade = {CascadeType.ALL})  // vamos a adicionarle que los notificaciones se van a guardar en cascada
     private List<NotificacionEntity> notificaciones;
 
-
-    // relacion con el objeto de la clase  SolicitudVacacionesEntity
-    // Relacion: por cada gestion_solicitudes hay una solicitud_vacaciones
-    // creacion de lista de la solicudVaciones para asociarlas con un Usuarios
-    @OneToOne(mappedBy = "gestionSolicitud")
-    private SolicitudVacacionesEntity solicitudVacaciones;
-
-
+    // Relacion: listar las vacaciones por gestion de solicitud
+    @OneToMany(mappedBy = "gestionSolicitud")
+    private List<VacacionesEntity> vacaciones;
 
     public Integer getIdGestionSolicitud() {
         return idGestionSolicitud;
@@ -58,6 +49,14 @@ public class GestionSolicitudEntity {
 
     public void setIdGestionSolicitud(Integer idGestionSolicitud) {
         this.idGestionSolicitud = idGestionSolicitud;
+    }
+
+    public Integer getSolicitudVacacionesId() {
+        return solicitudVacacionesId;
+    }
+
+    public void setSolicitudVacacionesId(Integer solicitudVacacionesId) {
+        this.solicitudVacacionesId = solicitudVacacionesId;
     }
 
     public boolean isAprobacionSupervisor() {
@@ -68,20 +67,12 @@ public class GestionSolicitudEntity {
         this.aprobacionSupervisor = aprobacionSupervisor;
     }
 
-    public boolean isAprobacionAdministracion() {
-        return aprobacionAdministracion;
+    public boolean isAprobacionAdministrador() {
+        return aprobacionAdministrador;
     }
 
-    public void setAprobacionAdministracion(boolean aprobacionAdministracion) {
-        this.aprobacionAdministracion = aprobacionAdministracion;
-    }
-
-    public Integer getIdAdministrador() {
-        return idAdministrador;
-    }
-
-    public void setIdAdministrador(Integer idAdministrador) {
-        this.idAdministrador = idAdministrador;
+    public void setAprobacionAdministrador(boolean aprobacionAdministrador) {
+        this.aprobacionAdministrador = aprobacionAdministrador;
     }
 
     public String getEstado() {
@@ -100,20 +91,12 @@ public class GestionSolicitudEntity {
         this.fecha = fecha;
     }
 
-    public Integer getUsuarioId() {
-        return usuarioId;
+    public SolicitudVacacionesEntity getSolicitudVacaciones() {
+        return solicitudVacaciones;
     }
 
-    public void setUsuarioId(Integer usuarioId) {
-        this.usuarioId = usuarioId;
-    }
-
-    public AdministradorEntity getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(AdministradorEntity usuario) {
-        this.usuario = usuario;
+    public void setSolicitudVacaciones(SolicitudVacacionesEntity solicitudVacaciones) {
+        this.solicitudVacaciones = solicitudVacaciones;
     }
 
     public List<NotificacionEntity> getNotificaciones() {
@@ -124,11 +107,11 @@ public class GestionSolicitudEntity {
         this.notificaciones = notificaciones;
     }
 
-    public SolicitudVacacionesEntity getSolicitudVacaciones() {
-        return solicitudVacaciones;
+    public List<VacacionesEntity> getVacaciones() {
+        return vacaciones;
     }
 
-    public void setSolicitudVacaciones(SolicitudVacacionesEntity solicitudVacaciones) {
-        this.solicitudVacaciones = solicitudVacaciones;
+    public void setVacaciones(List<VacacionesEntity> vacaciones) {
+        this.vacaciones = vacaciones;
     }
 }

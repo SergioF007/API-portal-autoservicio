@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class SolicitudVacacionesDto {
 
-    private Integer SolicitudVacacionesId;
+    private int solicitudVacacionesId;
 
-    private Integer cantidadDias;
+    private int cantidadDias;
 
     private LocalDate inicioVacaciones;
 
@@ -20,23 +20,23 @@ public class SolicitudVacacionesDto {
 
     private boolean firmaSupervisor;
 
-    private Integer gestionSolicitudId;
+    private int usuarioId;
 
     private GestionSolicitudDto gestionSolicitud;
 
-    public Integer getSolicitudVacacionesId() {
-        return SolicitudVacacionesId;
+    public int getSolicitudVacacionesId() {
+        return solicitudVacacionesId;
     }
 
-    public void setSolicitudVacacionesId(Integer solicitudVacacionesId) {
-        SolicitudVacacionesId = solicitudVacacionesId;
+    public void setSolicitudVacacionesId(int solicitudVacacionesId) {
+        this.solicitudVacacionesId = solicitudVacacionesId;
     }
 
-    public Integer getCantidadDias() {
+    public int getCantidadDias() {
         return cantidadDias;
     }
 
-    public void setCantidadDias(Integer cantidadDias) {
+    public void setCantidadDias(int cantidadDias) {
         this.cantidadDias = cantidadDias;
     }
 
@@ -88,13 +88,19 @@ public class SolicitudVacacionesDto {
         this.firmaSupervisor = firmaSupervisor;
     }
 
-    public Integer getGestionSolicitudId() {
-        return gestionSolicitudId;
+    public int getUsuarioId() {
+        return usuarioId;
     }
 
-    public void setGestionSolicitudId(Integer gestionSolicitudId) {
-        this.gestionSolicitudId = gestionSolicitudId;
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
+    public GestionSolicitudDto getGestionSolicitud() {
+        return gestionSolicitud;
+    }
 
+    public void setGestionSolicitud(GestionSolicitudDto gestionSolicitud) {
+        this.gestionSolicitud = gestionSolicitud;
+    }
 }

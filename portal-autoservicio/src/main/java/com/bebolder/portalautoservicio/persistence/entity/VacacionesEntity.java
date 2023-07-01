@@ -10,8 +10,8 @@ public class VacacionesEntity {
     @Column(name = "id_vacaciones")
     private Integer idVacaciones;
 
-    @Column(name = "solicitud_vacaciones_id")
-    private Integer solicitudVacionesId;
+    @Column(name = "gestion_solicitud_id")
+    private Integer gestionSolicitudId;
     private String periodo;
 
     @Column(name = "dias_disfrutados")
@@ -19,9 +19,8 @@ public class VacacionesEntity {
 
     // Relaciones
     @ManyToOne
-    @JoinColumn(name = "solicitud_vacaciones_id", insertable = false, updatable = false)
-    private SolicitudVacacionesEntity solicitudVacaciones;
-
+    @JoinColumn(name = "gestion_solicitud_id", insertable = false, updatable = false)
+    private GestionSolicitudEntity gestionSolicitud;
 
     public Integer getIdVacaciones() {
         return idVacaciones;
@@ -31,12 +30,12 @@ public class VacacionesEntity {
         this.idVacaciones = idVacaciones;
     }
 
-    public SolicitudVacacionesEntity getSolicitudVacaciones() {
-        return solicitudVacaciones;
+    public Integer getGestionSolicitudId() {
+        return gestionSolicitudId;
     }
 
-    public void setSolicitudVacaciones(SolicitudVacacionesEntity solicitudVacaciones) {
-        this.solicitudVacaciones = solicitudVacaciones;
+    public void setGestionSolicitudId(Integer gestionSolicitudId) {
+        this.gestionSolicitudId = gestionSolicitudId;
     }
 
     public String getPeriodo() {
@@ -53,5 +52,13 @@ public class VacacionesEntity {
 
     public void setDiasDisfrutados(Integer diasDisfrutados) {
         this.diasDisfrutados = diasDisfrutados;
+    }
+
+    public GestionSolicitudEntity getGestionSolicitud() {
+        return gestionSolicitud;
+    }
+
+    public void setGestionSolicitud(GestionSolicitudEntity gestionSolicitud) {
+        this.gestionSolicitud = gestionSolicitud;
     }
 }

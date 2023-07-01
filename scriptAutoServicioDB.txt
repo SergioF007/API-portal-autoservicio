@@ -1,5 +1,3 @@
--- MySQL Workbench Forward Engineering
-
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -44,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`usuarios` (
   `correo` VARCHAR(50) NULL,
   `equipo_id` INT NULL,
   PRIMARY KEY (`id_usuario`),
-  INDEX `id_equipo_idx` (`equipo_id` ASC) VISIBLE,
+  INDEX `id_equipo_idx` (`equipo_id` ASC),
   UNIQUE INDEX `documento_UNIQUE` (`documento` ASC),
   CONSTRAINT `id_equipo`
     FOREIGN KEY (`equipo_id`)
@@ -55,19 +53,21 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes`
+-- Table `PORTAL_AUTOSERVICIO_DB`.`solicitudes_vacaciones`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (
-  `id_gestion_solicitud` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`solicitudes_vacaciones` (
+  `id_solicitud_vacaciones` INT NOT NULL AUTO_INCREMENT,
   `usuario_id` INT NOT NULL,
-  `aprobacion_supervisor` TINYINT NULL,
-  `aprobacion_administracion` TINYINT NULL,
-  `id_administrador` INT NULL,
-  `estado` VARCHAR(30) NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_gestion_solicitud`),
-  INDEX `fk_gestion_solicitudes_usuarios1_idx` (`usuario_id` ASC),
-  CONSTRAINT `fk_gestion_solicitudes_usuarios1`
+  `cantidad_dias` INT(2) NOT NULL,
+  `inicio_vacaciones` DATE NOT NULL,
+  `fin_vacaciones` DATE NOT NULL,
+  `fecha_reintegro` DATE NOT NULL,
+  `observacion` VARCHAR(250) NULL,
+  `firma_empleado` TINYINT NOT NULL,
+  `firma_supervisor` TINYINT NULL,
+  PRIMARY KEY (`id_solicitud_vacaciones`),
+  INDEX `fk_solicitudes_vacaciones_usuarios1_idx` (`usuario_id` ASC),
+  CONSTRAINT `fk_solicitudes_vacaciones_usuarios1`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `PORTAL_AUTOSERVICIO_DB`.`usuarios` (`id_usuario`)
     ON DELETE NO ACTION
@@ -76,25 +76,23 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `PORTAL_AUTOSERVICIO_DB`.`solicitudes_vacaciones`
+-- Table `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`solicitudes_vacaciones` (
-  `id_solicitud_vacaciones` INT NOT NULL AUTO_INCREMENT,
-  `cantidad_dias` INT(2) NOT NULL,
-  `inicio_vacaciones` DATE NOT NULL,
-  `fin_vacaciones` DATE NOT NULL,
-  `fecha_reintegro` DATE NOT NULL,
-  `observacion` VARCHAR(250) NULL,
-  `firma_empleado` TINYINT NOT NULL,
-  `firma_supervisor` TINYINT NULL,
-  `gestion_solicitud_id` INT NOT NULL,
-  PRIMARY KEY (`id_solicitud_vacaciones`, `gestion_solicitud_id`),
-  INDEX `fk_solicitud_vacaciones_gestion_solicitudes1_idx` (`gestion_solicitud_id` ASC),
-  CONSTRAINT `fk_solicitud_vacaciones_gestion_solicitudes1`
-    FOREIGN KEY (`gestion_solicitud_id`)
-    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (`id_gestion_solicitud`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (
+  `id_gestion_solicitud` INT NOT NULL AUTO_INCREMENT,
+  `solicitud_vacaciones_id` INT NOT NULL,
+  `aprobacion_supervisor` TINYINT NULL,
+  `aprobacion_administrador` TINYINT NULL,
+  `id_administrador` INT NULL,
+  `estado` VARCHAR(30) NOT NULL,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_gestion_solicitud`, `solicitud_vacaciones_id`),
+  INDEX `fk_gestion_solicitudes_solicitudes_vacaciones1_idx` (`solicitud_vacaciones_id` ASC),
+  CONSTRAINT `fk_gestion_solicitudes_solicitudes_vacaciones1`
+    FOREIGN KEY (`solicitud_vacaciones_id`)
+    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`solicitudes_vacaciones` (`id_solicitud_vacaciones`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -120,14 +118,14 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`vacaciones` (
   `id_vacaciones` INT NOT NULL AUTO_INCREMENT,
-  `solicitud_vacaciones_id` INT NOT NULL,
+  `gestion_solicitud_id` INT NOT NULL,
   `periodo` VARCHAR(10) NOT NULL,
   `dias_disfrutados` INT(2) NOT NULL,
   PRIMARY KEY (`id_vacaciones`),
-  INDEX `fk_vacaciones_solicitud_vacaciones1_idx` (`solicitud_vacaciones_id` ASC),
-  CONSTRAINT `fk_vacaciones_solicitud_vacaciones1`
-    FOREIGN KEY (`solicitud_vacaciones_id`)
-    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`solicitudes_vacaciones` (`id_solicitud_vacaciones`)
+  INDEX `fk_vacaciones_gestion_solicitudes1_idx` (`gestion_solicitud_id` ASC),
+  CONSTRAINT `fk_vacaciones_gestion_solicitudes1`
+    FOREIGN KEY (`gestion_solicitud_id`)
+    REFERENCES `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (`id_gestion_solicitud`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -163,6 +161,18 @@ CREATE TABLE IF NOT EXISTS `PORTAL_AUTOSERVICIO_DB`.`usuarios_roles` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+USE `PORTAL_AUTOSERVICIO_DB`;
+
+DELIMITER $$
+USE `PORTAL_AUTOSERVICIO_DB`$$
+CREATE DEFINER = CURRENT_USER TRIGGER `PORTAL_AUTOSERVICIO_DB`.`solicitudes_vacaciones_AFTER_INSERT` AFTER INSERT ON `solicitudes_vacaciones` FOR EACH ROW
+BEGIN
+	INSERT INTO `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` (solicitud_vacaciones_id, estado)
+	VALUES (NEW.id_solicitud_vacaciones, 'pendiente de aprobación');
+END$$
+
+
+DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
@@ -334,67 +344,102 @@ insert into usuarios_roles (usuario_id, rol_id) values (59,3);
 insert into usuarios_roles (usuario_id, rol_id) values (60,3);
 
 
--- -------------------------------------------------------------------------------------
--- ---------- update Data to 'gestion_solicitudes' ------------------------------------------------
-
-SELECT * FROM portal_autoservicio_db.gestion_solicitudes;
-
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (2, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (2, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (3, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (6, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (6, NULL, NULL, 15, 'cancelada');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (6, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (11, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (11, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (13, true, true, 15, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (13, true, true, 15, 'cancelada');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (14, false, NULL, 25, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (14, true, true, 25, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (16, true, true, 25, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (16, true, true, 25, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (18, true, true, 25, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (20, true, true, 25, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (20, true, NULL, 25, 'pendientes de aprobación');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (21, true, true, 25, 'aprobadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (22, true, true, 25, 'disfrutadas');
-insert into gestion_solicitudes (usuario_id, aprobacion_supervisor, aprobacion_administracion, id_administrador, estado) values (22, true, true, 25, 'aprobadas');
-
 
 -- -------------------------------------------------------------------------------------
 -- ---------- Insert Data to 'solicitud_vacaciones' ------------------------------------------------
 
+USE portal_autoservicio_db; 
+
 SELECT * FROM portal_autoservicio_db.solicitudes_vacaciones;
 
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (4, '2022-08-01', '2022-08-04', '2022-08-05', 'mensaje de observación 1', true, true, 1);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (6, '2022-12-20', '2022-12-26', '2022-12-27', 'mensaje de observación 2', true, true, 2);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (3, '2022/06/20', '2023/06/23', '2023/06/24', 'mensaje de observación 3', true, true, 3);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (3, '2023/01/15', '2023/01/17', '2023/01/18', 'mensaje de observación 2', true, true, 4);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (2, '2023/05/10', '2023/05/12', '2023/05/13', 'mensaje de observación 4', true, true, 5);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (2, '2023/06/10', '2023/06/12', '2023/06/13', 'mensaje de observación 5', true, true, 6);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (6, '2023/01/10', '2023/01/16', '2023/01/17', 'mensaje de observación 2', true, true, 7);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (4, '2023/06/12', '2023/06/16', '2023/06/17', 'mensaje de observación 1', true, true, 8);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (5, '2023/04/09', '2023/04/14', '2023/04/15', 'mensaje de observación 4', true, true, 9);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (3, '2023/06/15', '2023/06/17', '2023/06/18', 'mensaje de observación 1', true, false, 10);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (4, '2021/10/11', '2021/10/14', '2021/10/15', 'mensaje de observación 1', true, true, 11);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (6, '2022/03/15', '2022/03/20', '2022/03/21', 'mensaje de observación 3', true, true, 12);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (3, '2022/12/15', '2022/12/17', '2022/12/18', 'mensaje de observación 4', true, true, 13);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (4, '2023/05/10', '2023/05/13', '2023/05/14', 'mensaje de observación 3', true, true, 14);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (2, '2023/06/15', '2023/06/16', '2023/06/17', 'mensaje de observación 2', true, true, 15);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (6, '2023/04/20', '2023/04/25', '2023/04/26', 'mensaje de observación 1', true, true, 16);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (2, '2023/07/30', '2023/08/01', '2023/08/02', 'mensaje de observación 2', true, true, 17);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (6, '2023/06/25', '2023/06/30', '2023/07/01', 'mensaje de observación 3', true, true, 18);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (4, '2023/04/05', '2023/04/08', '2023/04/08', 'mensaje de observación 1', true, true, 19);
-insert into solicitudes_vacaciones (cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor, gestion_solicitud_id) values (5, '2023/06/28', '2023/07/02', '2023/07/03', 'mensaje de observación 3', true, true, 20);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (2, 4, '2022-08-01', '2022-08-04', '2022-08-05', 'mensaje de observación 1', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (2, 6, '2022-12-20', '2022-12-26', '2022-12-27', 'mensaje de observación 2', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (3, 3, '2022/06/20', '2023/06/23', '2023/06/24', 'mensaje de observación 3', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (6, 3, '2023/01/15', '2023/01/17', '2023/01/18', 'mensaje de observación 2', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (6, 2, '2023/05/10', '2023/05/12', '2023/05/13', 'mensaje de observación 4', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (6, 2, '2023/06/10', '2023/06/12', '2023/06/13', 'mensaje de observación 5', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (11, 6, '2023/01/10', '2023/01/16', '2023/01/17', 'mensaje de observación 2', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (11, 4, '2023/06/12', '2023/06/16', '2023/06/17', 'mensaje de observación 1', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (13, 5, '2023/04/09', '2023/04/14', '2023/04/15', 'mensaje de observación 4', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (13, 3, '2023/06/15', '2023/06/17', '2023/06/18', 'mensaje de observación 1', true, false);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (14, 4, '2021/10/11', '2021/10/14', '2021/10/15', 'mensaje de observación 1', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (14, 6, '2022/03/15', '2022/03/20', '2022/03/21', 'mensaje de observación 3', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (16, 3, '2022/12/15', '2022/12/17', '2022/12/18', 'mensaje de observación 4', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (16, 4, '2023/05/10', '2023/05/13', '2023/05/14', 'mensaje de observación 3', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (18, 2, '2023/06/15', '2023/06/16', '2023/06/17', 'mensaje de observación 2', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (20, 6, '2023/04/20', '2023/04/25', '2023/04/26', 'mensaje de observación 1', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (20, 2, '2023/07/30', '2023/08/01', '2023/08/02', 'mensaje de observación 2', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (21, 6, '2023/06/25', '2023/06/30', '2023/07/01', 'mensaje de observación 3', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (22, 4, '2023/04/05', '2023/04/08', '2023/04/08', 'mensaje de observación 1', true, true);
+insert into solicitudes_vacaciones (usuario_id, cantidad_dias, inicio_vacaciones, fin_vacaciones, fecha_reintegro, observacion, firma_empleado, firma_supervisor) values (22, 5, '2023/06/28', '2023/07/02', '2023/07/03', 'mensaje de observación 3', true, true);
 
 SELECT *
 FROM solicitud_vacaciones
 WHERE estado LIKE '%disfrutadas%';
 
 
+-- -------------------------------------------------------------------------------------
+-- ---------- update Data to 'gestion_solicitudes' ------------------------------------------------
+
+USE portal_autoservicio_db; 
+
+SELECT * FROM portal_autoservicio_db.gestion_solicitudes;
+
+-- sin la implementacion del Trigger disparador usar: -------------------------
+
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (NULL, NULL, null, 'cancelada');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 15, 'cancelada');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, null, null, 'pendientes de aprobación');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'aprobadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'disfrutadas');
+insert into gestion_solicitudes (aprobacion_supervisor, aprobacion_administrador, id_administrador, estado) values (true, true, 25, 'aprobadas');
+
+
+-- Con la implementacion del Trigger disparador
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `estado` = 'cancelada' WHERE `id_gestion_solicitud` = 5;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'cancelada', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 10;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'aprobadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 18;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'aprobadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 20;
+
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true WHERE `id_gestion_solicitud` = 17;
+
+
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 1;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 2;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 3;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 4;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 6;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 7;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 8;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 15 WHERE `id_gestion_solicitud` = 9;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 11;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 12;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 13;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 14;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 15;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 16;
+UPDATE `PORTAL_AUTOSERVICIO_DB`.`gestion_solicitudes` SET `aprobacion_supervisor` = true, `aprobacion_administrador` = true, `estado` = 'disfrutadas', `id_administrador` = 25 WHERE `id_gestion_solicitud` = 19;
+
+
 
 -- -------------------------------------------------------------------------------------
 -- ---------- Insert Data to 'vacaciones' ------------------------------------------------
+
+USE portal_autoservicio_db; 
 
 SELECT * FROM portal_autoservicio_db.vacaciones;
 

@@ -42,10 +42,10 @@ public abstract class UsuarioEntity {
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
     private List<UsuarioRolEntity> roles;
 
-    // Listar las gestiones de solicitud por ususarios
-    // Relacion: Una usuario puede tener de 1 a muchas gestiones de solicitud
+    // Listar las solicitudes de vacaciones por ususarios
+    // Relacion: Un usuario puede tener de 1 a muchas solicitudes de vacaciones
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
-    private List<GestionSolicitudEntity> gestionSolicitud;
+    private List<SolicitudVacacionesEntity> solicitudVacaciones;
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -151,7 +151,6 @@ public abstract class UsuarioEntity {
         this.correo = correo;
     }
 
-
     public Integer getEquipoId() {
         return equipoId;
     }
@@ -176,11 +175,11 @@ public abstract class UsuarioEntity {
         this.roles = roles;
     }
 
-    public List<GestionSolicitudEntity> getGestionSolicitud() {
-        return gestionSolicitud;
+    public List<SolicitudVacacionesEntity> getSolicitudVacaciones() {
+        return solicitudVacaciones;
     }
 
-    public void setGestionSolicitud(List<GestionSolicitudEntity> gestionSolicitud) {
-        this.gestionSolicitud = gestionSolicitud;
+    public void setSolicitudVacaciones(List<SolicitudVacacionesEntity> solicitudVacaciones) {
+        this.solicitudVacaciones = solicitudVacaciones;
     }
 }

@@ -11,7 +11,7 @@ import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {EquipoMapper.class})
+@Mapper(componentModel = "spring", uses = {EquipoMapper.class, SolicitudVacacionesMapper.class})
 public interface AdministradorMapper {
 
 
@@ -27,7 +27,7 @@ public interface AdministradorMapper {
     @InheritInverseConfiguration
     @Mappings({
             @Mapping(target = "roles", ignore = true),
-            @Mapping(target = "gestionSolicitud", ignore = true),
+            @Mapping(target = "solicitudVacaciones", ignore = true),
 
     })
     AdministradorEntity toUsuarioEntity(AdministradorDto administradorDto);

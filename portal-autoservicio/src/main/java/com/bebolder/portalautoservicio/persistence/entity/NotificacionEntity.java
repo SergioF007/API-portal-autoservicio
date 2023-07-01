@@ -32,12 +32,12 @@ public class NotificacionEntity {
         this.idNotificacion = idNotificacion;
     }
 
-    public GestionSolicitudEntity getGestionSolicitud() {
-        return gestionSolicitud;
+    public Integer getGestionSolicitudId() {
+        return gestionSolicitudId;
     }
 
-    public void setGestionSolicitud(GestionSolicitudEntity gestionSolicitud) {
-        this.gestionSolicitud = gestionSolicitud;
+    public void setGestionSolicitudId(Integer gestionSolicitudId) {
+        this.gestionSolicitudId = gestionSolicitudId;
     }
 
     public String getMensaje() {
@@ -46,5 +46,13 @@ public class NotificacionEntity {
 
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
+    }
+
+    public GestionSolicitudEntity getGestionSolicitud() {
+        return gestionSolicitud;
+    }
+
+    public void setGestionSolicitud(GestionSolicitudEntity gestionSolicitud) {
+        this.gestionSolicitud = gestionSolicitud;
     }
 }

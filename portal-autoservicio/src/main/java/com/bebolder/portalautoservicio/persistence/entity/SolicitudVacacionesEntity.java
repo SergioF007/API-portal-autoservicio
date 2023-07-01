@@ -2,14 +2,13 @@ package com.bebolder.portalautoservicio.persistence.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "solicitudes_vacaciones")
 public class SolicitudVacacionesEntity {
 
     @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     @Column(name = "id_solicitud_vacaciones")
     private Integer idSolicitudVacaciones;
 
@@ -33,21 +32,19 @@ public class SolicitudVacacionesEntity {
     @Column(name = "firma_supervisor")
     private boolean firmaSupervisor;
 
-    @Column(name = "gestion_solicitud_id")
-    private Integer gestionSolicitudId;
+    @Column(name = "usuario_id")
+    private Integer usuarioId;
 
     // Incio Relaciones
 
-    // tomar la solicitudVacaciones asociada a la gestionSolicitud
-    @OneToOne
-    @JoinColumn(name = "gestion_solicitud_id", insertable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
+    private AdministradorEntity usuario;
+
+    // relacion con el objeto de la clase  GestionSolicitudEntity
+    // Relacion: por cada solicitud_vacaciones hay una  gestion_solicitudes
+    @OneToOne(mappedBy = "solicitudVacaciones")
     private GestionSolicitudEntity gestionSolicitud;
-
-
-    // Relacion: lista las vacaciones de una solicitud disfrutada
-    @OneToMany(mappedBy = "solicitudVacaciones")
-    private List<VacacionesEntity> vacaciones;
-
 
     public Integer getIdSolicitudVacaciones() {
         return idSolicitudVacaciones;
@@ -113,19 +110,27 @@ public class SolicitudVacacionesEntity {
         this.firmaSupervisor = firmaSupervisor;
     }
 
+    public Integer getUsuarioId() {
+        return usuarioId;
+    }
+
+    public void setUsuarioId(Integer usuarioId) {
+        this.usuarioId = usuarioId;
+    }
+
+    public AdministradorEntity getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(AdministradorEntity usuario) {
+        this.usuario = usuario;
+    }
+
     public GestionSolicitudEntity getGestionSolicitud() {
         return gestionSolicitud;
     }
 
     public void setGestionSolicitud(GestionSolicitudEntity gestionSolicitud) {
         this.gestionSolicitud = gestionSolicitud;
-    }
-
-    public List<VacacionesEntity> getVacaciones() {
-        return vacaciones;
-    }
-
-    public void setVacaciones(List<VacacionesEntity> vacaciones) {
-        this.vacaciones = vacaciones;
     }
 }
