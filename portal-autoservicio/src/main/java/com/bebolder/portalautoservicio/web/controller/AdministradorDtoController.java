@@ -1,6 +1,7 @@
 package com.bebolder.portalautoservicio.web.controller;
 
 import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
+import com.bebolder.portalautoservicio.domain.dto.SolicitudVacacionesDto;
 import com.bebolder.portalautoservicio.domain.service.AdministradorService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/administrador")
@@ -44,7 +44,7 @@ public class AdministradorDtoController {
     @ApiOperation("Searche a Users with a Id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 404, message = "Usuario not found")
+            @ApiResponse(code = 404, message = "User not found")
     })
     public ResponseEntity<AdministradorDto> getUsuario(@ApiParam(value = "The id of the user", required = true, example = "2") @PathVariable("Id") int usuarioId) {
         return administradorService.getUsuario(usuarioId)
@@ -74,5 +74,17 @@ public class AdministradorDtoController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/solicitudes-vacaciones/usuarioId/{Id}")
+    @ApiOperation(" Search vacation requests by user ")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 404, message = "vacation request not found")
+    })
+    public ResponseEntity<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(@PathVariable("Id") int usuarioId){
+        return administradorService.getSolicitudesVacacionesByUsuario(usuarioId)
+                .map(solicitudVacacionesDtos -> new ResponseEntity<>(solicitudVacacionesDtos, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

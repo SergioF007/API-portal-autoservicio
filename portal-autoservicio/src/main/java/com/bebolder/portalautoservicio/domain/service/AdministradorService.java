@@ -1,6 +1,7 @@
 package com.bebolder.portalautoservicio.domain.service;
 
 import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
+import com.bebolder.portalautoservicio.domain.dto.SolicitudVacacionesDto;
 import com.bebolder.portalautoservicio.domain.repository.AdministradorDtoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ public class AdministradorService {
 
     @Autowired
     private AdministradorDtoRepository administradorDtoRepository;
+
+
 
     public List<AdministradorDto> getAll() {
 
@@ -41,4 +44,8 @@ public class AdministradorService {
                 }).orElse(false);
     }
 
+
+    public Optional<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(int usuarioId) {
+        return administradorDtoRepository.getSolicitudesVacacionesByUsuario(usuarioId);
+    }
 }

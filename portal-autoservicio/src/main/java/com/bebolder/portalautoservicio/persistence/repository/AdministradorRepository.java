@@ -1,10 +1,14 @@
 package com.bebolder.portalautoservicio.persistence.repository;
 
 import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
+import com.bebolder.portalautoservicio.domain.dto.SolicitudVacacionesDto;
 import com.bebolder.portalautoservicio.domain.repository.AdministradorDtoRepository;
 import com.bebolder.portalautoservicio.persistence.crud.AdministradorCrudRepository;
+import com.bebolder.portalautoservicio.persistence.crud.SolicitudVacacionesCrudRepository;
 import com.bebolder.portalautoservicio.persistence.entity.AdministradorEntity;
+import com.bebolder.portalautoservicio.persistence.entity.SolicitudVacacionesEntity;
 import com.bebolder.portalautoservicio.persistence.mapper.AdministradorMapper;
+import com.bebolder.portalautoservicio.persistence.mapper.SolicitudVacacionesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +22,15 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     private AdministradorCrudRepository administradorCrudRepository;
 
     @Autowired
+    private SolicitudVacacionesCrudRepository solicitudVacacionesCrudRepository;
+
+    @Autowired
     private UsuarioRolRepositroy usuarioRolRepositroy;
 
     @Autowired
     private AdministradorMapper mapper;
+
+    private SolicitudVacacionesMapper solicitudVacacionesMapper;
     // trear todos los usuarios
 
     @Override
@@ -56,6 +65,14 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     @Override
     public void delete(int usuarioId) {
         administradorCrudRepository.deleteById(usuarioId);
+    }
+
+    @Override
+    public Optional<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(int usuarioId) {
+
+        List<SolicitudVacacionesEntity> solicitudesVacaciones = solicitudVacacionesCrudRepository.findByUsuarioIdOrderByIdSolicitudVacacionesDesc(usuarioId);
+        return Optional.of(solicitudVacacionesMapper.toSolicitudesVacacionesDto(solicitudesVacaciones));
+
     }
 
 }
