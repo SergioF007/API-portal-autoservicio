@@ -56,7 +56,7 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     @Override
     public AdministradorDto save(AdministradorDto administradorDto) {
         AdministradorEntity usuario = mapper.toUsuarioEntity(administradorDto);
-        // se esta esta converesion porque save esperea es un objeto de AdministradorEntity no de AdministradorDto
+        // se esta esta convirtiendo porque save esperea es un objeto de AdministradorEntity no de AdministradorDto
         return mapper.toUsuarioDto(administradorCrudRepository.save(usuario));
     }
     @Override

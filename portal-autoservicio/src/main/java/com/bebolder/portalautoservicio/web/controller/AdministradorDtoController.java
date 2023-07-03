@@ -94,7 +94,7 @@ public class AdministradorDtoController {
     }
 
     @PostMapping("/solicitud-vacaciones/save")
-    @ApiOperation("Save vacation request")
+    @ApiOperation("Save admin vacation request")
     @ApiResponses({
             @ApiResponse(code = 200, message = "vacation request save"),
             @ApiResponse(code = 404, message = "vacation request not save")

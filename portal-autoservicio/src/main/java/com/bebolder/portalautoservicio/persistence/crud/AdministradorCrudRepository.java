@@ -15,5 +15,4 @@ public interface AdministradorCrudRepository extends CrudRepository<Administrado
     @Query(value = "SELECT * FROM usuarios u WHERE u.id_usuario IN ?1", nativeQuery = true)
     List<AdministradorEntity> getUsersByRol(List<Integer> userIds);
 
-
 }
