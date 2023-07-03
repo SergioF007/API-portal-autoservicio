@@ -15,12 +15,15 @@ public interface GestionSolicitudMapper {
     @Mapping(source = "idGestionSolicitud", target = "gestionSolicitudId")
     GestionSolicitudDto toGestionSolicitudDto(GestionSolicitudEntity gestionSolicitud);
 
-    @InheritInverseConfiguration
+    /*
     @Mappings({
-        @Mapping(target = "solicitudVacaciones", ignore = true),
-        @Mapping(target = "notificaciones", ignore = true),
-        @Mapping(target = "vacaciones", ignore = true),
+            @Mapping(target = "solicitudVacaciones", ignore = true),
+            // @Mapping(target = "notificaciones", ignore = true),
+            // @Mapping(target = "vacaciones", ignore = true)
     })
+
+     */
+    @InheritInverseConfiguration
     GestionSolicitudEntity toGestionSolicitudEntity(GestionSolicitudDto gestionSolicitudDto);
 
 }

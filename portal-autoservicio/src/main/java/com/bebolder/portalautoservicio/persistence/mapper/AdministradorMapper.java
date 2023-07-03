@@ -27,7 +27,7 @@ public interface AdministradorMapper {
     @InheritInverseConfiguration
     @Mappings({
             @Mapping(target = "roles", ignore = true),
-            @Mapping(target = "solicitudVacaciones", ignore = true),
+            //@Mapping(target = "solicitudVacaciones", ignore = true),
 
     })
     AdministradorEntity toUsuarioEntity(AdministradorDto administradorDto);

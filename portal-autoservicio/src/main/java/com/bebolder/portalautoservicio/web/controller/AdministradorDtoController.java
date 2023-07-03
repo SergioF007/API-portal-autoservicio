@@ -83,8 +83,13 @@ public class AdministradorDtoController {
             @ApiResponse(code = 404, message = "vacation request not found")
     })
     public ResponseEntity<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(@PathVariable("Id") int usuarioId){
+
         return administradorService.getSolicitudesVacacionesByUsuario(usuarioId)
                 .map(solicitudVacacionesDtos -> new ResponseEntity<>(solicitudVacacionesDtos, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
     }
+
+
+
 }

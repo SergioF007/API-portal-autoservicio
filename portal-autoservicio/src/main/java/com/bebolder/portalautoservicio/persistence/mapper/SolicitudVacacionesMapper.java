@@ -5,18 +5,23 @@ import com.bebolder.portalautoservicio.persistence.entity.SolicitudVacacionesEnt
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {GestionSolicitudMapper.class, AdministradorMapper.class})
+@Mapper(componentModel = "spring", uses = {GestionSolicitudMapper.class})
 public interface SolicitudVacacionesMapper {
 
-    @Mapping(source = "idSolicitudVacaciones", target = "solicitudVacacionesId")
+    @Mappings({
+            @Mapping(source = "idSolicitudVacaciones", target = "solicitudVacacionesId"),
+            @Mapping(source = "gestionSolicitud", target = "gestionSolicitudDto")
+
+    })
     SolicitudVacacionesDto toSolicitudVacacionesDto(SolicitudVacacionesEntity solicitudVacacionesEntity);
     List<SolicitudVacacionesDto> toSolicitudesVacacionesDto(List<SolicitudVacacionesEntity> solicitudesVacacionesEntities);
 
+    //@Mapping(target = "usuario", ignore = true)
     @InheritInverseConfiguration
-    @Mapping(target = "usuario", ignore = true)
     SolicitudVacacionesEntity toSolicitudVacacionesEntity(SolicitudVacacionesDto solicitudVacacionesDto);
 
 }

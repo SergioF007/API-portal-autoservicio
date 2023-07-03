@@ -29,19 +29,27 @@ public class GestionSolicitudEntity {
     private LocalDateTime fecha;
 
     // tomar la solicitud de vacaciones asociada a la gestion solicitud
-    @OneToOne
-    @JoinColumn(name = "solicitud_vacaciones_id", insertable = false, updatable = false)
+    //@JoinColumn(name = "solicitud_vacaciones_id", insertable = false, updatable = false)
+
+    /*
+    @OneToOne(mappedBy = "gestionSolicitud")
     private SolicitudVacacionesEntity solicitudVacaciones;
 
 
+     */
+
     // Listar las notificaciones vinculadas a una gestionSolicitud
     // Relacion: Una gestionSolicitud puede tener de 1 a muchas solicitudes
-    @OneToMany(mappedBy = "gestionSolicitud", cascade = {CascadeType.ALL})  // vamos a adicionarle que los notificaciones se van a guardar en cascada
+
+    /*
+    @OneToMany(mappedBy = "gestionSolicitud")  // vamos a adicionarle que los notificaciones se van a guardar en cascada
     private List<NotificacionEntity> notificaciones;
 
     // Relacion: listar las vacaciones por gestion de solicitud
     @OneToMany(mappedBy = "gestionSolicitud")
     private List<VacacionesEntity> vacaciones;
+
+     */
 
     public Integer getIdGestionSolicitud() {
         return idGestionSolicitud;
@@ -91,27 +99,5 @@ public class GestionSolicitudEntity {
         this.fecha = fecha;
     }
 
-    public SolicitudVacacionesEntity getSolicitudVacaciones() {
-        return solicitudVacaciones;
-    }
 
-    public void setSolicitudVacaciones(SolicitudVacacionesEntity solicitudVacaciones) {
-        this.solicitudVacaciones = solicitudVacaciones;
-    }
-
-    public List<NotificacionEntity> getNotificaciones() {
-        return notificaciones;
-    }
-
-    public void setNotificaciones(List<NotificacionEntity> notificaciones) {
-        this.notificaciones = notificaciones;
-    }
-
-    public List<VacacionesEntity> getVacaciones() {
-        return vacaciones;
-    }
-
-    public void setVacaciones(List<VacacionesEntity> vacaciones) {
-        this.vacaciones = vacaciones;
-    }
 }

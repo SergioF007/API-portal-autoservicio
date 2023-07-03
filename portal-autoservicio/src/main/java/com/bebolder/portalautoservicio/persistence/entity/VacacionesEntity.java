@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class VacacionesEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_vacaciones")
     private Integer idVacaciones;
 

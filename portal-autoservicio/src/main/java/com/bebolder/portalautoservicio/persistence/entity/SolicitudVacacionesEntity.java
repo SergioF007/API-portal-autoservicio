@@ -32,18 +32,22 @@ public class SolicitudVacacionesEntity {
     @Column(name = "firma_supervisor")
     private boolean firmaSupervisor;
 
-    @Column(name = "usuario_id")
+    @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
     private Integer usuarioId;
 
     // Incio Relaciones
 
+    /*
     @ManyToOne
     @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
     private AdministradorEntity usuario;
 
+
+     */
     // relacion con el objeto de la clase  GestionSolicitudEntity
     // Relacion: por cada solicitud_vacaciones hay una  gestion_solicitudes
-    @OneToOne(mappedBy = "solicitudVacaciones")
+    @OneToOne
+    @JoinColumn(name = "id_solicitud_vacaciones",  insertable = false, updatable = false)
     private GestionSolicitudEntity gestionSolicitud;
 
     public Integer getIdSolicitudVacaciones() {
@@ -118,13 +122,6 @@ public class SolicitudVacacionesEntity {
         this.usuarioId = usuarioId;
     }
 
-    public AdministradorEntity getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(AdministradorEntity usuario) {
-        this.usuario = usuario;
-    }
 
     public GestionSolicitudEntity getGestionSolicitud() {
         return gestionSolicitud;

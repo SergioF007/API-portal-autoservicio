@@ -30,6 +30,7 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     @Autowired
     private AdministradorMapper mapper;
 
+    @Autowired
     private SolicitudVacacionesMapper solicitudVacacionesMapper;
     // trear todos los usuarios
 
@@ -70,9 +71,10 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     @Override
     public Optional<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(int usuarioId) {
 
-        List<SolicitudVacacionesEntity> solicitudesVacaciones = solicitudVacacionesCrudRepository.findByUsuarioIdOrderByIdSolicitudVacacionesDesc(usuarioId);
+        List<SolicitudVacacionesEntity> solicitudesVacaciones =  solicitudVacacionesCrudRepository.findByUsuarioIdOrderByIdSolicitudVacacionesDesc(usuarioId);
         return Optional.of(solicitudVacacionesMapper.toSolicitudesVacacionesDto(solicitudesVacaciones));
 
     }
+
 
 }

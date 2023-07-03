@@ -44,8 +44,12 @@ public abstract class UsuarioEntity {
 
     // Listar las solicitudes de vacaciones por ususarios
     // Relacion: Un usuario puede tener de 1 a muchas solicitudes de vacaciones
+
+    /*
     @OneToMany(mappedBy = "usuario", cascade = {CascadeType.ALL})
     private List<SolicitudVacacionesEntity> solicitudVacaciones;
+
+     */
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -175,11 +179,5 @@ public abstract class UsuarioEntity {
         this.roles = roles;
     }
 
-    public List<SolicitudVacacionesEntity> getSolicitudVacaciones() {
-        return solicitudVacaciones;
-    }
 
-    public void setSolicitudVacaciones(List<SolicitudVacacionesEntity> solicitudVacaciones) {
-        this.solicitudVacaciones = solicitudVacaciones;
-    }
 }

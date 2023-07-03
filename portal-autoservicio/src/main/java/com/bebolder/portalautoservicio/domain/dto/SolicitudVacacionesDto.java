@@ -22,7 +22,8 @@ public class SolicitudVacacionesDto {
 
     private int usuarioId;
 
-    private GestionSolicitudDto gestionSolicitud;
+    private GestionSolicitudDto gestionSolicitudDto;
+
 
     public int getSolicitudVacacionesId() {
         return solicitudVacacionesId;
@@ -96,11 +97,11 @@ public class SolicitudVacacionesDto {
         this.usuarioId = usuarioId;
     }
 
-    public GestionSolicitudDto getGestionSolicitud() {
-        return gestionSolicitud;
+    public GestionSolicitudDto getGestionSolicitudDto() {
+        return gestionSolicitudDto;
     }
 
-    public void setGestionSolicitud(GestionSolicitudDto gestionSolicitud) {
-        this.gestionSolicitud = gestionSolicitud;
+    public void setGestionSolicitudDto(GestionSolicitudDto gestionSolicitudDto) {
+        this.gestionSolicitudDto = gestionSolicitudDto;
     }
 }
