@@ -22,16 +22,12 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     private AdministradorCrudRepository administradorCrudRepository;
 
     @Autowired
-    private SolicitudVacacionesCrudRepository solicitudVacacionesCrudRepository;
-
-    @Autowired
     private UsuarioRolRepositroy usuarioRolRepositroy;
 
     @Autowired
     private AdministradorMapper mapper;
 
-    @Autowired
-    private SolicitudVacacionesMapper solicitudVacacionesMapper;
+
     // trear todos los usuarios
 
     @Override
@@ -66,14 +62,6 @@ public class AdministradorRepository implements AdministradorDtoRepository {
     @Override
     public void delete(int usuarioId) {
         administradorCrudRepository.deleteById(usuarioId);
-    }
-
-    @Override
-    public Optional<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(int usuarioId) {
-
-        List<SolicitudVacacionesEntity> solicitudesVacaciones =  solicitudVacacionesCrudRepository.findByUsuarioIdOrderByIdSolicitudVacacionesDesc(usuarioId);
-        return Optional.of(solicitudVacacionesMapper.toSolicitudesVacacionesDto(solicitudesVacaciones));
-
     }
 
 

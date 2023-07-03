@@ -18,6 +18,4 @@ public interface AdministradorDtoRepository {
 
     void delete(int usuarioId);
 
-
-    Optional<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(int usuarioId);
 }

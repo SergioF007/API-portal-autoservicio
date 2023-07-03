@@ -3,6 +3,7 @@ package com.bebolder.portalautoservicio.web.controller;
 import com.bebolder.portalautoservicio.domain.dto.AdministradorDto;
 import com.bebolder.portalautoservicio.domain.dto.SolicitudVacacionesDto;
 import com.bebolder.portalautoservicio.domain.service.AdministradorService;
+import com.bebolder.portalautoservicio.domain.service.SolicitudVacacionesService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -20,6 +21,8 @@ public class AdministradorDtoController {
 
     @Autowired
     private AdministradorService administradorService;
+    @Autowired
+    private SolicitudVacacionesService solicitudVacacionesService;
 
     @GetMapping("/all")
     @ApiOperation("GET all Users")
@@ -82,12 +85,23 @@ public class AdministradorDtoController {
             @ApiResponse(code = 200, message = "Ok"),
             @ApiResponse(code = 404, message = "vacation request not found")
     })
-    public ResponseEntity<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(@PathVariable("Id") int usuarioId){
+    public ResponseEntity<List<SolicitudVacacionesDto>> getByUsuarioId(@PathVariable("Id") int usuarioId){
 
-        return administradorService.getSolicitudesVacacionesByUsuario(usuarioId)
+        return solicitudVacacionesService.getByUsuarioId(usuarioId)
                 .map(solicitudVacacionesDtos -> new ResponseEntity<>(solicitudVacacionesDtos, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
+    }
+
+    @PostMapping("/solicitud-vacaciones/save")
+    @ApiOperation("Save vacation request")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "vacation request save"),
+            @ApiResponse(code = 404, message = "vacation request not save")
+    })
+    public ResponseEntity<SolicitudVacacionesDto> save(@RequestBody SolicitudVacacionesDto solicitudVacacionesDto) {
+
+        return new ResponseEntity<>(solicitudVacacionesService.save(solicitudVacacionesDto), HttpStatus.CREATED);
     }
 
 

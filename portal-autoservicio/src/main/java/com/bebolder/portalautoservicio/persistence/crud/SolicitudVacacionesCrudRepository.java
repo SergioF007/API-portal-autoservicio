@@ -11,4 +11,5 @@ public interface SolicitudVacacionesCrudRepository extends CrudRepository<Solici
 
     List<SolicitudVacacionesEntity> findByUsuarioIdOrderByIdSolicitudVacacionesDesc(int usuarioId);
 
+
 }

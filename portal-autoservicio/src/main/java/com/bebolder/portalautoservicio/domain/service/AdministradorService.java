@@ -45,7 +45,4 @@ public class AdministradorService {
     }
 
 
-    public Optional<List<SolicitudVacacionesDto>> getSolicitudesVacacionesByUsuario(int usuarioId) {
-        return administradorDtoRepository.getSolicitudesVacacionesByUsuario(usuarioId);
-    }
 }
