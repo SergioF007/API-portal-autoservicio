@@ -7,6 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './vistas/dashboard/dashboard.component';
 import { HeaderComponent } from './plantillas/header/header.component';
 import { FooterComponent } from './plantillas/footer/footer.component';
+import { EditarComponent } from './vistas/editar/editar.component';
 import { ReactiveFormsModule, FormsModule} from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http';
 
@@ -16,7 +17,8 @@ import { HttpClientModule } from '@angular/common/http';
     HomeComponent,
     DashboardComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    EditarComponent
     
     
   ],

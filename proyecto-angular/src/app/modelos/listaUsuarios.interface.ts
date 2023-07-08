@@ -9,7 +9,7 @@ export interface ListaUsuariosI{
     celular: string;
     direccion: string;
     fechaIngreso: string;
-    fechaRetiro: string | null;
+    fechaRetiro: string;
     tipoContrato: string;
     estado: boolean;
     cargo: string;

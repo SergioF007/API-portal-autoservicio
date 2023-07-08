@@ -11,7 +11,7 @@ import { ListaUsuariosI } from 'src/app/modelos/listaUsuarios.interface';
 })
 export class DashboardComponent implements OnInit {
 
-  usuarios:ListaUsuariosI[] = []; 
+  usuarios:ListaUsuariosI [] = []; 
 
   constructor(private api : ApiService, private router : Router) { }
 
@@ -19,6 +19,15 @@ export class DashboardComponent implements OnInit {
     this.api.getAllUsers().subscribe(data => {
       this.usuarios = data;
     })
+  }
+
+  editarEmpleado(id : any) {
+    this.router.navigate(['editar', id]);
+    // console.log(id) // lo uso para ver en consola lo que me recibe
+  }
+
+  nuevoEmpleado() {
+    this.router.navigate(['nuevo']);
   }
 
 }

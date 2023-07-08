@@ -18,6 +18,12 @@ export class ApiService {
 
     return this.http.get<ListaUsuariosI[]>(direccion);
   }
+
+  getSingleUser(id : any):Observable<ListaUsuariosI> {
+
+    let direccion = this.url + "administrador/" + id;
+    return this.http.get<ListaUsuariosI>(direccion);
+  }
   
 
 }

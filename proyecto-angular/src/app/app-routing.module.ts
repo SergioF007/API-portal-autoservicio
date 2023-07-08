@@ -6,7 +6,7 @@ import {DashboardComponent} from './vistas/dashboard/dashboard.component'
 
 const routes: Routes = [
   {path: 'nuevo', component: NuevoComponent},
-  {path: 'editar', component: EditarComponent},
+  {path: 'editar/:id', component: EditarComponent},
   {path: 'dashboard', component: DashboardComponent}
 
 ];
