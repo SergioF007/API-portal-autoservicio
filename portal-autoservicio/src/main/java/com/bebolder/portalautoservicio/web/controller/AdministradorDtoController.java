@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/administrador")
+@CrossOrigin(origins =  "http://localhost:4200" )
 public class AdministradorDtoController {
 
     @Autowired
@@ -82,7 +83,7 @@ public class AdministradorDtoController {
     @GetMapping("/solicitudes-vacaciones/usuarioId/{Id}")
     @ApiOperation(" Search vacation requests by user ")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 404, message = "vacation request not found")
     })
     public ResponseEntity<List<SolicitudVacacionesDto>> getByUsuarioId(@PathVariable("Id") int usuarioId){
