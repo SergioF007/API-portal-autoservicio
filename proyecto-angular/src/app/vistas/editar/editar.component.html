@@ -2,6 +2,14 @@
 
 <div class="container-fluid">
 
+    <form [formGroup]="editarForm">
+        <div class="form-group">
+            <label for="formControlInput1">Nombre</label>
+            <input type="text" class="form-control" placeholder="Nombre del paciente" formControlName="nombre">
+
+        </div>
+
+    </form>
     
 </div>
 
