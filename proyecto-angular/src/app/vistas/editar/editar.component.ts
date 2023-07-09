@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router , ActivatedRoute} from '@angular/router';
 import { ListaUsuariosI } from 'src/app/modelos/listaUsuarios.interface';
+import { ResponseI } from 'src/app/modelos/response.interface';
 import { ApiService } from 'src/app/services/api/api.service';
+import { AlertasService } from 'src/app/services/alertas/alertas.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-editar',
@@ -11,7 +14,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class EditarComponent implements OnInit {
 
-  constructor(private activeRouter:ActivatedRoute , private router:Router, private api:ApiService) { }
+  constructor(private activeRouter:ActivatedRoute , private router:Router, private api:ApiService, private alertas:AlertasService) { }
 
   datosEmpleado:ListaUsuariosI | undefined;
   editarForm = new FormGroup({
@@ -62,8 +65,13 @@ export class EditarComponent implements OnInit {
   postForm(form:ListaUsuariosI){
 
     this.api.postUser(form).subscribe( data => {
-
-      console.log(data);
+      let respuesta:ResponseI = data;
+      if(form.usuarioId) {
+        this.alertas.showSuccess('Datos modificados', 'Hecho');
+      }else {
+        this.alertas.showError(respuesta.message, 'Error')
+      }
+      console.log(respuesta);
 
     } )
 
@@ -79,7 +87,12 @@ export class EditarComponent implements OnInit {
 
     let datos:ListaUsuariosI = this.editarForm.value as ListaUsuariosI;
     this.api.deleteUser(datos).subscribe(data =>{
-      console.log(data);
+      let respuesta:ResponseI = data;
+      if(datos.usuarioId) {
+        this.alertas.showSuccess('Empleado Eliminado', 'Hecho');
+      }else {
+        this.alertas.showError(respuesta.message, 'Error')
+      }
     } )
   }
 
