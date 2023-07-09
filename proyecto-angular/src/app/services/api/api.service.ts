@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ResponseI } from 'src/app/modelos/response.interface';
 import {HttpClient , HttpHeaders} from '@angular/common/http'
 import {Observable} from 'rxjs'
 import { ListaUsuariosI } from 'src/app/modelos/listaUsuarios.interface';
@@ -23,6 +24,11 @@ export class ApiService {
 
     let direccion = this.url + "administrador/" + id;
     return this.http.get<ListaUsuariosI>(direccion);
+  }
+
+  postUser(form:ListaUsuariosI):Observable<ResponseI> {
+    let direccion = this.url + "administrador/save";
+    return this.http.post<ResponseI>(direccion, form);
   }
   
 

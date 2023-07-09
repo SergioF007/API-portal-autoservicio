@@ -61,7 +61,12 @@ export class EditarComponent implements OnInit {
 
   postForm(form:ListaUsuariosI){
 
-    console.log(form);
+    this.api.postUser(form).subscribe( data => {
+
+      console.log(data);
+
+    } )
+
   }
 
   onSubmit() {
