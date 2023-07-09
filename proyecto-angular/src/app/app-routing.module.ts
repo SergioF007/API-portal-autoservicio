@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import {NuevoComponent} from './vistas/nuevo/nuevo.component';
 import {EditarComponent} from './vistas/editar/editar.component';
 import {DashboardComponent} from './vistas/dashboard/dashboard.component'
+import { GestionEmpleadosComponent } from './vistas/gestion-empleados/gestion-empleados.component';
 
 const routes: Routes = [
   {path: 'nuevo', component: NuevoComponent},
   {path: 'editar/:id', component: EditarComponent},
-  {path: 'dashboard', component: DashboardComponent}
+  {path: 'dashboard', component: DashboardComponent},
+  {path: 'gestion-empleados', component: GestionEmpleadosComponent}
 
 ];
 

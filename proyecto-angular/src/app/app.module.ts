@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { GestionEmpleadosComponent } from './vistas/gestion-empleados/gestion-empleados.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ToastrModule } from 'ngx-toastr';
     HeaderComponent,
     FooterComponent,
     EditarComponent,
-    NuevoComponent
+    NuevoComponent,
+    GestionEmpleadosComponent
     
     
   ],

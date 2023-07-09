@@ -16,18 +16,15 @@ export class DashboardComponent implements OnInit {
   constructor(private api : ApiService, private router : Router) { }
 
   ngOnInit(): void {
-    this.api.getAllUsers().subscribe(data => {
-      this.usuarios = data;
-    })
+
   }
 
-  editarEmpleado(id : any) {
-    this.router.navigate(['editar', id]);
-    // console.log(id) // lo uso para ver en consola lo que me recibe
+  gestionEmpleado() {
+
+    this.router.navigate(['gestion-empleados']);
+
   }
 
-  nuevoEmpleado() {
-    this.router.navigate(['nuevo']);
-  }
+
 
 }

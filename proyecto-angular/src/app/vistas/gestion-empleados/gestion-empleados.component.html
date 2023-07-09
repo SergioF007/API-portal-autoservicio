@@ -1,0 +1,52 @@
+<app-header> </app-header>
+
+
+<div class="container-fluid">
+
+    <h3>Listado de Empleados</h3><br>
+  
+    <button type="button" class="btn btn-primary" (click)="nuevoEmpleado()">Nuevo Empleado</button>
+    <br><br>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col" class="wider-column">Tipo Doc.</th>
+          <th scope="col">Documento</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col" class="wider-column2">Celular</th>
+          <th scope="col">Direccion</th>
+          <th scope="col" class="wider-column2">Fecha Ingredo</th>
+          <!-- <th scope="col" class="wider-column">Fecha Retiro</th> -->
+          <th scope="col" class="wider-column2">Tipo Contrato</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Cargo</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Equipo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios" (click)="editarEmpleado(usuario.usuarioId)">
+          <th scope="row">{{ usuario.usuarioId }}</th>
+          <td>{{ usuario.tipoDocumento }}</td>
+          <td>{{ usuario.documento }}</td>
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellidos }}</td>
+          <td>{{ usuario.celular }}</td>
+          <td>{{ usuario.direccion }}</td>
+          <td>{{ usuario.fechaIngreso }}</td>
+          <!-- <td>{{ usuario.fechaRetiro }}</td> -->
+          <td>{{ usuario.tipoContrato }}</td>
+          <td>{{ usuario.estado }}</td>
+          <td>{{ usuario.cargo }}</td>
+          <td>{{ usuario.correo }}</td>
+          <td>{{ usuario.equipoDto?.nombreEquipo }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+</div>
+
+<app-footer> </app-footer>
