@@ -53,11 +53,11 @@
 
                     <div class="col">
                         <label for="formControlInpunt1">Fecha de Ingreso</label>
-                        <input type="text" class="form-control" placeholder="Fecha de ingreso" formControlName="fechaIngreso">
+                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" formControlName="fechaIngreso">
                     </div>
                     <div class="col">
                         <label for="formControlInpunt1">Fecha de Retiro</label>
-                        <input type="text" class="form-control" placeholder="Fecha de retiro" formControlName="fechaRetiro">
+                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" formControlName="fechaRetiro">
                     </div>
                     
                 </div><br>
@@ -111,6 +111,7 @@
         <br>
         <button type="submit" class="btn btn-primary">Guardar</button>
         <button type="button" class="btn btn-danger" (click)="eliminar()">Eliminar</button>
+        <button type="button" class="btn btn-dark" (click)="salir()">Salir</button>
 
     
     </form>
