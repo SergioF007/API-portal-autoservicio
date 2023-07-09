@@ -90,6 +90,7 @@ export class EditarComponent implements OnInit {
       let respuesta:ResponseI = data;
       if(datos.usuarioId) {
         this.alertas.showSuccess('Empleado Eliminado', 'Hecho');
+        this.router.navigate(['dashboard']);
       }else {
         this.alertas.showError(respuesta.message, 'Error')
       }
