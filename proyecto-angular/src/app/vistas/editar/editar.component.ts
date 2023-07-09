@@ -74,6 +74,15 @@ export class EditarComponent implements OnInit {
     this.postForm(formValue);
   }
 
+  eliminar() {
+    //const formValue = this.editarForm.value as ListaUsuariosI;
+
+    let datos:ListaUsuariosI = this.editarForm.value as ListaUsuariosI;
+    this.api.deleteUser(datos).subscribe(data =>{
+      console.log(data);
+    } )
+  }
+
 
 
 }

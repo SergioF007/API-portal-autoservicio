@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ResponseI } from 'src/app/modelos/response.interface';
 import {HttpClient , HttpHeaders} from '@angular/common/http'
-import {Observable} from 'rxjs'
+import {Observable, from} from 'rxjs'
 import { ListaUsuariosI } from 'src/app/modelos/listaUsuarios.interface';
 
 @Injectable({
@@ -31,5 +31,14 @@ export class ApiService {
     return this.http.post<ResponseI>(direccion, form);
   }
   
-
+  deleteUser(form:ListaUsuariosI):Observable<ResponseI> {
+    let direccion = this.url + "administrador/delete/" + form.usuarioId;
+    let Options = {
+      headers: new HttpHeaders({
+        'Conten-type': 'application/json'
+      }),
+      body:from
+    }
+    return this.http.delete<ResponseI>(direccion, Options);
+  }
 }
