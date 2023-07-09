@@ -3,14 +3,114 @@
 <div class="container-fluid">
 
     <form [formGroup]="editarForm">
-        <div class="form-group">
-            <label for="formControlInput1">Nombre</label>
-            <input type="text" class="form-control" placeholder="Nombre del paciente" formControlName="nombre">
-
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Datos Personales</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="formControlInput1">Nombre</label>
+                        <input type="text" class="form-control" placeholder="Nombre del empleado" formControlName="nombre">
+                    </div>
+                    <div class="col">
+                        <label for="formControlInput1">Apellidos</label>
+                        <input type="text" class="form-control" placeholder="Apellido del empleado" formControlName="apellidos">
+                    </div>
+                </div><br>
+                <div class="form-group row ">
+                    <div class="col-sm-1">
+                        <label for="formControlInput1">Tipo Doc.</label>
+                        <select class="form-control" formControlName="tipoDocumento">
+                            <option value="PA">PA</option>
+                            <option value="CE">CE</option>
+                            <option value="CC">CC</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="formControlInpunt1">Documento</label>
+                        <input type="text" class="form-control" placeholder="Numero de documento del empleado" formControlName="documento">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="formControlInpunt1">Celular</label>
+                        <input type="text" class="form-control" placeholder="Numero de celular del empleado" formControlName="celular">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="formControlInpunt1">Direccion</label>
+                        <input type="text" class="form-control" placeholder="Direccion" formControlName="direccion">
+                    </div>
+                </div>
+            </div>
+            
         </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Datos Adicionales</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
 
+                    <div class="col">
+                        <label for="formControlInpunt1">Fecha de Ingreso</label>
+                        <input type="text" class="form-control" placeholder="Fecha de ingreso" formControlName="fechaIngreso">
+                    </div>
+                    <div class="col">
+                        <label for="formControlInpunt1">Fecha de Retiro</label>
+                        <input type="text" class="form-control" placeholder="Fecha de retiro" formControlName="fechaRetiro">
+                    </div>
+                    
+                </div><br>
+
+                <div class="form-group row">
+
+                    <div class="col">
+                        <label for="formControlInpunt1">Tipo de Contrato</label>
+                        <input type="text" class="form-control" placeholder="Tipo de contrato" formControlName="tipoContrato">
+                    </div>
+                    <div class="col">
+                        <label for="formControlInpunt1">Estado</label>
+                        <input type="text" class="form-control" placeholder="Estado" formControlName="estado">
+                    </div>
+                    
+                </div><br>
+
+                <div class="form-group row">
+
+                    <div class="col">
+                        <label for="formControlInpunt1">Cargo</label>
+                        <input type="text" class="form-control" placeholder="Cargo" formControlName="cargo">
+                    </div>
+                    <div class="col">
+                        <label for="formControlInpunt1">correo</label>
+                        <input type="text" class="form-control" placeholder="Correo" formControlName="correo">
+                    </div>
+                    
+                </div><br>
+               
+
+                <div class="form-group row">
+
+                    <div class="col">
+                        <label for="formControlInput1">Equipo</label>
+                        <select class="form-control" formControlName="equipoId">
+                          <option value="1">Deméter</option>
+                          <option value="2">Artemisa</option>
+                          <option value="3">Afrodita</option>
+                          <option value="4">Poseidón</option>
+                          <option value="5">Hades</option>
+                          <option value="6">Dionisos</option>
+                          <option value="7">Hermes</option>
+                          <option value="8">Apolo</option>
+                        </select>
+                    </div>
+                </div><br>
+            </div>
+            
+        </div>
+    
     </form>
     
 </div>
-
+<br>
 <app-footer> </app-footer>

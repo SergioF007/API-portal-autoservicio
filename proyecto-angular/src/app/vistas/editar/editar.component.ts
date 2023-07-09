@@ -25,7 +25,7 @@ export class EditarComponent implements OnInit {
     fechaIngreso: new FormControl(''),
     fechaRetiro: new FormControl(''),
     tipoContrato: new FormControl(''),
-    estado: new FormControl(''),
+    estado: new FormControl(false),
     cargo: new FormControl(''),
     correo: new FormControl(''),
     equipoId: new FormControl(0),
@@ -48,7 +48,7 @@ export class EditarComponent implements OnInit {
         'fechaIngreso' : this.datosEmpleado.fechaIngreso, 
         'fechaRetiro' : this.datosEmpleado.fechaRetiro,
         'tipoContrato' : this.datosEmpleado.tipoContrato,
-        'estado' : this.datosEmpleado.tipoContrato,
+        'estado' : this.datosEmpleado.estado,
         'cargo' : this.datosEmpleado.cargo,
         'correo' : this.datosEmpleado.correo,
         'equipoId' : this.datosEmpleado.equipoId
