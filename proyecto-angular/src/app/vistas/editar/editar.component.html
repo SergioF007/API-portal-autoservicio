@@ -2,7 +2,7 @@
 
 <div class="container-fluid">
 
-    <form [formGroup]="editarForm">
+    <form [formGroup]="editarForm" (ngSubmit)="onSubmit()">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Datos Personales</h5>
@@ -108,8 +108,13 @@
             </div>
             
         </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+
     
     </form>
+    <br>
+
     
 </div>
 <br>

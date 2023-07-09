@@ -29,6 +29,7 @@ export class EditarComponent implements OnInit {
     cargo: new FormControl(''),
     correo: new FormControl(''),
     equipoId: new FormControl(0),
+    equipoDto: new FormControl(null)
 
   });
 
@@ -51,10 +52,23 @@ export class EditarComponent implements OnInit {
         'estado' : this.datosEmpleado.estado,
         'cargo' : this.datosEmpleado.cargo,
         'correo' : this.datosEmpleado.correo,
-        'equipoId' : this.datosEmpleado.equipoId
+        'equipoId' : this.datosEmpleado.equipoId,
+        'equipoDto': null
       });
-      console.log(this.editarForm.value);
+
     })
   }
+
+  postForm(form:ListaUsuariosI){
+
+    console.log(form);
+  }
+
+  onSubmit() {
+    const formValue = this.editarForm.value as ListaUsuariosI;
+    this.postForm(formValue);
+  }
+
+
 
 }
