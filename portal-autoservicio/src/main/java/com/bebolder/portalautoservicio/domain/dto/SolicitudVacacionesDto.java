@@ -16,9 +16,9 @@ public class SolicitudVacacionesDto {
 
     private String observacion;
 
-    private boolean firmaEmpleado;
+    private Boolean firmaEmpleado;
 
-    private boolean firmaSupervisor;
+    private Boolean firmaSupervisor;
 
     private int usuarioId;
 
@@ -73,19 +73,19 @@ public class SolicitudVacacionesDto {
         this.observacion = observacion;
     }
 
-    public boolean isFirmaEmpleado() {
+    public Boolean getFirmaEmpleado() {
         return firmaEmpleado;
     }
 
-    public void setFirmaEmpleado(boolean firmaEmpleado) {
+    public void setFirmaEmpleado(Boolean firmaEmpleado) {
         this.firmaEmpleado = firmaEmpleado;
     }
 
-    public boolean isFirmaSupervisor() {
+    public Boolean getFirmaSupervisor() {
         return firmaSupervisor;
     }
 
-    public void setFirmaSupervisor(boolean firmaSupervisor) {
+    public void setFirmaSupervisor(Boolean firmaSupervisor) {
         this.firmaSupervisor = firmaSupervisor;
     }
 

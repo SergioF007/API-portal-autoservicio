@@ -10,9 +10,9 @@ public class GestionSolicitudDto {
 
     private int solicitudVacacionesId;
 
-    private boolean aprobacionSupervisor;
+    private Boolean aprobacionSupervisor;
 
-    private boolean aprobacionAdministrador;
+    private Boolean aprobacionAdministrador;
 
     private String estado;
 
@@ -34,19 +34,19 @@ public class GestionSolicitudDto {
         this.solicitudVacacionesId = solicitudVacacionesId;
     }
 
-    public boolean isAprobacionSupervisor() {
+    public Boolean getAprobacionSupervisor() {
         return aprobacionSupervisor;
     }
 
-    public void setAprobacionSupervisor(boolean aprobacionSupervisor) {
+    public void setAprobacionSupervisor(Boolean aprobacionSupervisor) {
         this.aprobacionSupervisor = aprobacionSupervisor;
     }
 
-    public boolean isAprobacionAdministrador() {
+    public Boolean getAprobacionAdministrador() {
         return aprobacionAdministrador;
     }
 
-    public void setAprobacionAdministrador(boolean aprobacionAdministrador) {
+    public void setAprobacionAdministrador(Boolean aprobacionAdministrador) {
         this.aprobacionAdministrador = aprobacionAdministrador;
     }
 

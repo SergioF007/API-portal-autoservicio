@@ -27,10 +27,10 @@ public class SolicitudVacacionesEntity {
     private String observacion;
 
     @Column(name = "firma_empleado")
-    private boolean firmaEmpleado;
+    private Boolean firmaEmpleado;
 
     @Column(name = "firma_supervisor")
-    private boolean firmaSupervisor;
+    private Boolean firmaSupervisor;
 
     @JoinColumn(name = "usuario_id", insertable = false, updatable = false)
     private Integer usuarioId;
@@ -98,19 +98,19 @@ public class SolicitudVacacionesEntity {
         this.observacion = observacion;
     }
 
-    public boolean isFirmaEmpleado() {
+    public Boolean getFirmaEmpleado() {
         return firmaEmpleado;
     }
 
-    public void setFirmaEmpleado(boolean firmaEmpleado) {
+    public void setFirmaEmpleado(Boolean firmaEmpleado) {
         this.firmaEmpleado = firmaEmpleado;
     }
 
-    public boolean isFirmaSupervisor() {
+    public Boolean getFirmaSupervisor() {
         return firmaSupervisor;
     }
 
-    public void setFirmaSupervisor(boolean firmaSupervisor) {
+    public void setFirmaSupervisor(Boolean firmaSupervisor) {
         this.firmaSupervisor = firmaSupervisor;
     }
 
