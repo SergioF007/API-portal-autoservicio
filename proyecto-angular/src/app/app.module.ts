@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { GestionEmpleadosComponent } from './vistas/gestion-empleados/gestion-empleados.component';
+import { SolicitudComponent } from './vistas/solicitud/solicitud.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { GestionEmpleadosComponent } from './vistas/gestion-empleados/gestion-em
     FooterComponent,
     EditarComponent,
     NuevoComponent,
-    GestionEmpleadosComponent
+    GestionEmpleadosComponent,
+    SolicitudComponent
     
     
   ],

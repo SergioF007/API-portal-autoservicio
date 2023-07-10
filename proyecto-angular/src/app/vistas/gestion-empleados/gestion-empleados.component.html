@@ -4,8 +4,18 @@
 <div class="container-fluid">
 
     <h3>Listado de Empleados</h3><br>
-  
+    <style>
+      .btn-red {
+        background-color: rgba(255, 0, 0, 0.678);
+        color: white;
+        
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+
+    </style>
     <button type="button" class="btn btn-primary" (click)="nuevoEmpleado()">Nuevo Empleado</button>
+    <button type="button" class="btn btn-red" (click)="salir()">Salir</button>
     <br><br>
 
     <table class="table table-hover">

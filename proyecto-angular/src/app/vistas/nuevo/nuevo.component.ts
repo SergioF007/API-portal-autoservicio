@@ -45,14 +45,15 @@ export class NuevoComponent implements OnInit {
 
   postForm(form:ListaUsuariosI) {
 
-    this.api.postUser(form).subscribe( data => {
+    this.api.postUser(form).subscribe( (data) => {
       let respuesta:ResponseI = data;
-      if(form.nombre) {
+      if(form.documento) {
         this.alertas.showSuccess('Empleado Creado', 'Hecho');
       }else {
         this.alertas.showError(respuesta.message, 'Error')
       }
       console.log(respuesta);
+      this.router.navigate(['gestion-empleados']);
 
     } )
   }

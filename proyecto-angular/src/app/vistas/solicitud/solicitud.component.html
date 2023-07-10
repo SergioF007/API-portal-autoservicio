@@ -1,0 +1,132 @@
+<app-header> </app-header>
+
+
+<div class="container-fluid">
+
+    <form [formGroup]="solicitudForm" (ngSubmit)="onSubmit()">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">DIAS DE VACACIONES SOLICITADOS</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col">
+                        <input type="number" class="form-control" formControlName="cantidadDias">
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">PERIODO DE VACACIONES</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+
+                    <div class="col">
+                        <label for="formControlInpunt1">Inicio</label>
+                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" formControlName="inicioVacaciones">
+                    </div>
+                    <div class="col">
+                        <label for="formControlInpunt1">Termina</label>
+                        <input type="text" class="form-control" placeholder="YYYY-MM-DD" formControlName="finVacaciones">
+                    </div>
+                </div><br>
+
+            </div>
+            
+        </div>
+        <br>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">DATOS ADICIONALES</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">FECHA DE REINTEGRO A LA EMPRESA</label>
+                    <div class="col-sm-10">
+                    <input type="email" class="form-control form-control-lg" formControlName="fechaReintegro" placeholder="YYYY-MM-DD">
+                    </div>
+                </div>
+        
+                <br>
+        
+                <div class="form-group row">
+                    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">OBSERVACIONES</label>
+                    <div class="col-sm-10">
+                    <input type="email" class="form-control form-control-lg" formControlName="observacion" placeholder="Observaciones">
+                    </div>
+                </div>
+                <br>
+
+            </div>
+            
+        </div>
+        <br>
+
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">FIRMAS</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+
+                    <div class="col">
+                        <label for="formControlInpunt1">Firma Empleado</label>
+                        <input type="text" class="form-control" placeholder="true o false" formControlName="firmaEmpleado">
+                    </div>
+                    <div class="col">
+                        <label for="formControlInpunt1">Firma Supervisor</label>
+                        <input type="text" class="form-control" placeholder="true o false" formControlName="firmaSupervisor">
+                    </div>
+                </div><br>
+
+            </div>
+            
+        </div>
+        <br>
+
+        <div class="col-sm-2">
+            <div class="card ">
+                <div class="card-header ">
+                    <h5 class="card-title">EMPLEADO ID</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" formControlName="usuarioId">
+                        </div>
+                    </div><br>
+                </div>
+            </div>
+        </div>
+
+
+        <br>
+
+
+        <style>
+            .btn-dark {
+              
+              margin-left: 5px;
+              margin-right: 5px;
+            }
+      
+          </style>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="button" class="btn btn-dark" (click)="salir()">Salir</button>
+
+    
+    </form>
+    <br>
+
+    
+</div>
+<br>
+
+
+
+<app-footer> </app-footer>

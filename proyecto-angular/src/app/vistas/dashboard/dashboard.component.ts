@@ -25,6 +25,12 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  solicitudEmpleado() {
+
+    this.router.navigate(['solicitud'])
+
+  }
+
 
 
 }

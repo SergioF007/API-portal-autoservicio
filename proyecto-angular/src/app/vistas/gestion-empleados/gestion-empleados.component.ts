@@ -29,4 +29,8 @@ export class GestionEmpleadosComponent implements OnInit {
     this.router.navigate(['nuevo']);
   }
 
+  salir() {
+    this.router.navigate(['dashboard']);
+  }
+
 }
