@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { GestionEmpleadosComponent } from './vistas/gestion-empleados/gestion-empleados.component';
 import { SolicitudComponent } from './vistas/solicitud/solicitud.component';
+import { GestionSolicitudComponent } from './vistas/gestion-solicitud/gestion-solicitud.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SolicitudComponent } from './vistas/solicitud/solicitud.component';
     EditarComponent,
     NuevoComponent,
     GestionEmpleadosComponent,
-    SolicitudComponent
+    SolicitudComponent,
+    GestionSolicitudComponent
     
     
   ],

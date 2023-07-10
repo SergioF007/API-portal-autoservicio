@@ -43,14 +43,17 @@ export class ApiService {
     return this.http.delete<ResponseI>(direccion, Options);
   }
 
-  getSolicitudUser(id : any):Observable<ListaSolicitudesI> {
-    let direccion = this.url + "administrador/solicitudes-vacaciones/usuarioId/" + id;
-    return this.http.get<ListaSolicitudesI>(direccion)
-  }
 
   postSolicitud(form:ListaSolicitudesI):Observable<ResponseI> {
     let direccion = this.url + "administrador/solicitud-vacaciones/save";
     return this.http.post<ResponseI>(direccion, form);
   }
+
+  getSolicitudUser(id : any):Observable<ListaSolicitudesI[]> {
+    let direccion = this.url + "administrador/solicitudes-vacaciones/usuarioId/" + id;
+    return this.http.get<ListaSolicitudesI[]>(direccion)
+  }
+
+  
 
 }

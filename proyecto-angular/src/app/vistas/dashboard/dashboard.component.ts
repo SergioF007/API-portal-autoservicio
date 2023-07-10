@@ -11,7 +11,7 @@ import { ListaUsuariosI } from 'src/app/modelos/listaUsuarios.interface';
 })
 export class DashboardComponent implements OnInit {
 
-  usuarios:ListaUsuariosI [] = []; 
+
 
   constructor(private api : ApiService, private router : Router) { }
 
@@ -27,8 +27,13 @@ export class DashboardComponent implements OnInit {
 
   solicitudEmpleado() {
 
-    this.router.navigate(['solicitud'])
+    this.router.navigate(['solicitud']);
 
+  }
+
+  gestionSolicitud() {
+
+    this.router.navigate(['gestion-solicitud']);
   }
 
 

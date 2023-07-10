@@ -5,13 +5,15 @@ import {EditarComponent} from './vistas/editar/editar.component';
 import {DashboardComponent} from './vistas/dashboard/dashboard.component'
 import { GestionEmpleadosComponent } from './vistas/gestion-empleados/gestion-empleados.component';
 import { SolicitudComponent } from './vistas/solicitud/solicitud.component';
+import { GestionSolicitudComponent } from './vistas/gestion-solicitud/gestion-solicitud.component';
 
 const routes: Routes = [
   {path: 'nuevo', component: NuevoComponent},
   {path: 'editar/:id', component: EditarComponent},
   {path: 'dashboard', component: DashboardComponent},
   {path: 'gestion-empleados', component: GestionEmpleadosComponent},
-  {path: 'solicitud', component: SolicitudComponent}
+  {path: 'solicitud', component: SolicitudComponent},
+  {path: 'gestion-solicitud', component: GestionSolicitudComponent}
 
 ];
 
@@ -20,4 +22,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents = {NuevoComponent, EditarComponent, DashboardComponent, GestionEmpleadosComponent, SolicitudComponent} 
+export const routingComponents = {NuevoComponent, EditarComponent, DashboardComponent, GestionEmpleadosComponent, SolicitudComponent, GestionSolicitudComponent} 

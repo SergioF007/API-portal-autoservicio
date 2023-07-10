@@ -1,0 +1,75 @@
+<app-header> </app-header>
+
+
+<div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="input-group" [formGroup]="formulario">
+          <label for="formControlInput1" class="input-group-text">Ingrese el ID del empleado:</label>
+          <input type="number" class="form-control" placeholder="ID del empleado" formControlName="usuarioId" >
+          <button type="button" class="btn btn-primary" (click)="buscar()">Buscar solicitudes de vacaciones</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<br><br>
+<style>
+  .btn-red {
+    background-color: rgba(255, 0, 0, 0.678);
+    color: white;
+    
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+</style>
+
+
+
+<div class="container-fluid">
+
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col" class="wider-column">Dias Pedidos</th>
+        <th scope="col">Fecha Inicio</th>
+        <th scope="col">Fecha Fin</th>
+        <th scope="col">Fecha Reintegro</th>
+        <th scope="col" class="wider-column2">Observaciones</th>
+        <th scope="col">Aprobacion Supervisor</th>
+        <th scope="col" class="wider-column2">Aprobacion Administrador</th>
+        <th scope="col" class="wider-column2">Estado</th>
+        <th scope="col">Creado</th>
+  
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let solicitud of solicitudes; let i=index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{solicitud.cantidadDias}}</td>
+          <td>{{solicitud.inicioVacaciones}}</td>
+          <td>{{solicitud.finVacaciones}}</td>
+          <td>{{solicitud.fechaReintegro}}</td>
+          <td>{{solicitud.observacion}}</td>
+          <td>{{solicitud.gestionSolicitudDto?.aprobacionSupervisor}}</td>
+          <td>{{solicitud.gestionSolicitudDto?.aprobacionAdministrador}}</td>
+          <td>{{solicitud.gestionSolicitudDto?.estado}}</td>
+          <td>{{solicitud.gestionSolicitudDto?.fecha}}</td>
+  
+  
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+  
+<br><br>
+
+<div class="text-center">
+  <button type="button" class="btn btn-red" (click)="salir()">Salir</button>
+</div>
+
+<app-footer> </app-footer>
