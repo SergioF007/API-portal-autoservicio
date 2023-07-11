@@ -69,7 +69,7 @@ export class EditarComponent implements OnInit {
       if(form.usuarioId) {
         this.alertas.showSuccess('Datos modificados', 'Hecho');
       }else {
-        this.alertas.showError(respuesta.message, 'Error')
+        this.alertas.showError('No se actualizaron los cambios', 'Error')
       }
       console.log(respuesta);
 
@@ -92,7 +92,7 @@ export class EditarComponent implements OnInit {
         this.alertas.showSuccess('Empleado Eliminado', 'Hecho');
         this.router.navigate(['gestion-empleados']);
       }else {
-        this.alertas.showError(respuesta.message, 'Error')
+        this.alertas.showError('No se elimino el empleado', 'Error')
       }
     } )
 

@@ -45,18 +45,18 @@
             </div>
             <div class="card-body">
                 <div class="form-group row">
-                    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">FECHA DE REINTEGRO A LA EMPRESA</label>
+                    <label for="colFormLabelLg" class="col-sm-2 col-form-label">FECHA DE REINTEGRO A LA EMPRESA</label>
                     <div class="col-sm-10">
-                    <input type="email" class="form-control form-control-lg" formControlName="fechaReintegro" placeholder="YYYY-MM-DD">
+                    <input type="email" class="form-control" formControlName="fechaReintegro" placeholder="YYYY-MM-DD">
                     </div>
                 </div>
         
                 <br>
         
                 <div class="form-group row">
-                    <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">OBSERVACIONES</label>
+                    <label for="colFormLabelLg" class="col-sm-2 col-form-label">OBSERVACIONES</label>
                     <div class="col-sm-10">
-                    <input type="email" class="form-control form-control-lg" formControlName="observacion" placeholder="Observaciones">
+                    <input type="email" class="form-control" formControlName="observacion" placeholder="Observaciones">
                     </div>
                 </div>
                 <br>
@@ -76,11 +76,17 @@
 
                     <div class="col">
                         <label for="formControlInpunt1">Firma Empleado</label>
-                        <input type="text" class="form-control" placeholder="true o false" formControlName="firmaEmpleado">
+                        <select class="form-control" formControlName="firmaEmpleado">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
                     </div>
                     <div class="col">
                         <label for="formControlInpunt1">Firma Supervisor</label>
-                        <input type="text" class="form-control" placeholder="true o false" formControlName="firmaSupervisor">
+                        <select class="form-control" formControlName="firmaSupervisor">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
                     </div>
                 </div><br>
 
@@ -89,20 +95,18 @@
         </div>
         <br>
 
-        <div class="col-sm-2">
-            <div class="card ">
-                <div class="card-header ">
-                    <h5 class="card-title">EMPLEADO ID</h5>
-                </div>
-                <div class="card-body">
-                    <div class="form-group row">
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control" formControlName="usuarioId">
-                        </div>
-                    </div><br>
-                </div>
+       
+        <div class="card ">
+            <div class="card-header ">
+                <h5 class="card-title">EMPLEADO ID</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <input type="number" class="form-control" formControlName="usuarioId">
+                </div><br>
             </div>
         </div>
+     
 
 
         <br>

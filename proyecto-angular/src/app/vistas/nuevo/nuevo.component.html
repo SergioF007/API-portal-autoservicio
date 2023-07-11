@@ -70,7 +70,10 @@
                     </div>
                     <div class="col">
                         <label for="formControlInpunt1">Estado</label>
-                        <input type="text" class="form-control" placeholder="Estado" formControlName="estado">
+                        <select class="form-control" formControlName="estado">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>                    
                     </div>
                     
                 </div><br>
@@ -109,6 +112,15 @@
             
         </div>
         <br>
+
+        <style>
+            .btn-dark {
+              
+              margin-left: 5px;
+              margin-right: 5px;
+            }
+      
+        </style>
         <button type="submit" class="btn btn-primary">Guardar</button>
         <button type="button" class="btn btn-dark" (click)="salir()">Salir</button>
 

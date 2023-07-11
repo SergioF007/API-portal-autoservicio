@@ -50,7 +50,7 @@ export class NuevoComponent implements OnInit {
       if(form.documento) {
         this.alertas.showSuccess('Empleado Creado', 'Hecho');
       }else {
-        this.alertas.showError(respuesta.message, 'Error')
+        this.alertas.showError('No se pudo crear el empleado', 'Error')
       }
       console.log(respuesta);
       this.router.navigate(['gestion-empleados']);
@@ -61,8 +61,7 @@ export class NuevoComponent implements OnInit {
 
   salir() {
 
-    this.router.navigate(['dashboard']);
-
+    this.router.navigate(['gestion-empleados']);
   }
 
 }

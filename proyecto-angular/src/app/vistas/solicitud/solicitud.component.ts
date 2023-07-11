@@ -47,7 +47,7 @@ export class SolicitudComponent implements OnInit {
       if(form.usuarioId) {
         this.alertas.showSuccess('Solicitud Creada', 'Hecho');
       }else {
-        this.alertas.showError(respuesta.message, 'Error')
+        this.alertas.showError('No se puedo crear la solicitud', 'Error')
       }
       this.router.navigate(['dashboard']);
     })
