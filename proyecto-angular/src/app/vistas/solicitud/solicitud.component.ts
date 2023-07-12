@@ -5,6 +5,7 @@ import { ResponseI } from 'src/app/modelos/response.interface';
 import { ApiService } from 'src/app/services/api/api.service';
 import { AlertasService } from 'src/app/services/alertas/alertas.service'; 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 
 @Component({
@@ -44,13 +45,26 @@ export class SolicitudComponent implements OnInit {
 
     this.api.postSolicitud(form).subscribe( data => {
       let respuesta:ResponseI = data;
+      console.log(respuesta);
+      console.log("Aqui se imprime la respuesta",respuesta);
+      
+      if( respuesta.status === 201){
+        this.alertas.showSuccess('exitoso', 'Ok')
+
+      }
+      /*
       if(form.usuarioId) {
         this.alertas.showSuccess('Solicitud Creada', 'Hecho');
       }else {
         this.alertas.showError('No se puedo crear la solicitud', 'Error')
       }
       this.router.navigate(['dashboard']);
-    })
+      */
+    },(error: HttpErrorResponse) => {
+      console.log(error),
+      this.alertas.showError('Fallo la creacion', 'Error')
+    });
+    
 
   }
 

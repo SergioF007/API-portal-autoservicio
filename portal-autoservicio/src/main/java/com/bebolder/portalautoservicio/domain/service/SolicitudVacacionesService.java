@@ -49,7 +49,7 @@ public class SolicitudVacacionesService {
 
         long diasDiferencia = ChronoUnit.DAYS.between(fechaCreacion, fechaInicio);
         if (diasDiferencia <= 15) {
-            throw new ValidacionException("La fecha de inicio de las vacaciones debe ser al menos 15 dias despues de la fecha de creación de la solicitud.");
+            throw new ValidacionException("La fecha de inicio de las vacaciones debe ser al menos 15 dias antes de la fecha de creación de la solicitud.");
         }
     }
 

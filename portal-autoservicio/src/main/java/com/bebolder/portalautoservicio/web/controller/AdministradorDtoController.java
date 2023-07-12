@@ -98,7 +98,9 @@ public class AdministradorDtoController {
     @ApiOperation("Save admin vacation request")
     @ApiResponses({
             @ApiResponse(code = 200, message = "vacation request save"),
-            @ApiResponse(code = 404, message = "vacation request not save")
+            @ApiResponse(code = 404, message = "vacation request not save"),
+            @ApiResponse(code = 500, message = "Error"),
+
     })
     public ResponseEntity<SolicitudVacacionesDto> save(@RequestBody SolicitudVacacionesDto solicitudVacacionesDto) {
 

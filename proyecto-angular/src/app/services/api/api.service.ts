@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ResponseI } from 'src/app/modelos/response.interface';
-import {HttpClient , HttpHeaders} from '@angular/common/http'
+import {HttpClient , HttpHeaders, HttpResponse} from '@angular/common/http'
 import {Observable, from} from 'rxjs'
 import { ListaUsuariosI } from 'src/app/modelos/listaUsuarios.interface';
 import { ListaSolicitudesI } from 'src/app/modelos/listaSolicitudes.interface';
@@ -44,9 +44,9 @@ export class ApiService {
   }
 
 
-  postSolicitud(form:ListaSolicitudesI):Observable<ResponseI> {
+  postSolicitud(form:ListaSolicitudesI):Observable<HttpResponse<ResponseI>> {
     let direccion = this.url + "administrador/solicitud-vacaciones/save";
-    return this.http.post<ResponseI>(direccion, form);
+    return this.http.post<ResponseI>(direccion, form,  { observe: 'response' });
   }
 
   getSolicitudUser(id : any):Observable<ListaSolicitudesI[]> {
